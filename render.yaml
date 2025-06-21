@@ -1,10 +1,9 @@
-version: "2"
+version: "1"
 
 services:
   - type: web
     name: kids-quiz-web
     env: node
-    plan: free
     buildCommand: npm install
     startCommand: node src/server.js
     envVars:
@@ -20,7 +19,6 @@ services:
   - type: worker
     name: kids-quiz-reviewer
     env: node
-    plan: free
     buildCommand: npm install
     startCommand: node src/ai/reviewer.js
     envVars:
@@ -33,23 +31,15 @@ services:
       - key: MAIL_PASS
         sync: false
 
-  - type: cron
-    name: kids-quiz-cron-review
-    env: node
-    plan: free
-    buildCommand: npm install
-    startCommand: node src/ai/reviewer.js
-    schedule: "@daily"
-    envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: kids-quiz-db
-          property: connectionString
-      - key: OPENAI_API_KEY
-        sync: false
-      - key: MAIL_PASS
-        sync: false
+schedules:
+  - name: daily-ai-review
+    serviceName: kids-quiz-reviewer
+    cron: "@daily"
+    command: node src/ai/reviewer.js
 
 databases:
   - name: kids-quiz-db
+    type: postgres
+    envVar: DATABASE_URL
     plan: free
+    migrations:     # Path to your migration files    
