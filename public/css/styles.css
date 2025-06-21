@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+
+body.theme {
+  font-family: 'Fredoka One', sans-serif;
+  background:#f9f7ff;
+  color:#333;
+  text-align:center;
+  margin:0;
+}
+
+#tabs {display:flex; justify-content:center; list-style:none; padding:0;}
+#tabs li {
+  background:#ffd95c; margin:4px; padding:12px 20px;
+  border-radius:25px; cursor:pointer; transition:transform .2s;
+}
+#tabs li:hover { transform:scale(1.1); }
+
+#quiz { margin-top:20px; }
+#question { font-size:1.5rem; margin:20px 0; }
+#choices li { margin:8px auto; width:60%; background:#fff; padding:10px; border:2px solid #ffd95c; border-radius:12px; cursor:pointer; }
+#choices li:hover { background:#ffeeb0; }
+dialog { border:none; border-radius:15px; padding:30px; }
