@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: kids-quiz-web
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node src/server.js
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: kids-quiz-db
+          property: connectionString
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: MAIL_PASS
+        sync: false
+
+  - type: worker
+    name: kids-quiz-reviewer
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node src/ai/reviewer.js
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: kids-quiz-db
+          property: connectionString
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: MAIL_PASS
+        sync: false
+
+    schedules:
+      - name: daily-ai-review
+        cron: "@daily"
+        command: node src/ai/reviewer.js
+
+databases:
+  - name: kids-quiz-db
+    plan: free
