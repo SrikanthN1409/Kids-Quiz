@@ -36,10 +36,8 @@ schedules:
     serviceName: kids-quiz-reviewer
     cron: "@daily"
     command: node src/ai/reviewer.js
+    
 
 databases:
   - name: kids-quiz-db
-    type: postgres
-    envVar: DATABASE_URL
-    plan: free
-    migrations:     # Path to your migration files    
+   
