@@ -18,16 +18,22 @@ function showQuestion() {
   if (!q) return quit();
   questionEl.textContent = q.body;
   choicesEl.innerHTML = '';
+
   ['a','b','c','d'].forEach(letter => {
     const li = document.createElement('li');
     li.textContent = q['choice_'+letter];
     li.onclick = () => {
-      if (letter.toUpperCase() === q.correct) score++;
-      idx++; showQuestion();
+      // Compare lowercase vs lowercase
+      if (letter === (q.correct || '').toLowerCase()) {
+        score++;
+      }
+      idx++;
+      showQuestion();
     };
     choicesEl.append(li);
   });
 }
+
 
 document.getElementById('quit').onclick = quit;
 function quit() {

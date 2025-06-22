@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { pool }   from '../db.js';
+import pool from '../db.js'; 
 const r = Router();
 
 /* GET /api/questions?category=Cartoon&limit=10 */

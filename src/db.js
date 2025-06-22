@@ -1,19 +1,22 @@
-// import pkg from 'pg';
-// import 'dotenv/config.js';
-// const { Pool } = pkg;
-
-// export const pool = new Pool({
-//   connectionString: process.env.DATABASE_URL,
-//   ssl: { rejectUnauthorized: false }   // Render’s Postgres
-// });
-import 'dotenv/config.js';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import pkg from 'pg';
+
 const { Pool } = pkg;
 
-console.log('🔐 DATABASE_URL =', process.env.DATABASE_URL); // Check if it loads
+// ✅ Load the .env file manually from project root
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
-export const pool = new Pool({
+const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }, // 👈 required for Render or Railway hosted DBs
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
+console.log('✅ Pool created with DB URL:', process.env.DATABASE_URL); // <-- should now show actual value
+
+export default pool;

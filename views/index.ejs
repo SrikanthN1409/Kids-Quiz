@@ -14,19 +14,35 @@
 
   <div class="ribbon"></div>
 
+  <!-- ⇩ category buttons -->
   <main>
     <ul id="tabs">
-      <li>Cartoon</li>
-      <li>Movies</li>
-      <li>Cricket</li>
-      <li>Science</li>
-      <li>Math</li>
+      <li data-cat="Cartoon">Cartoon</li>
+      <li data-cat="Movies">Movies</li>
+      <li data-cat="Cricket">Cricket</li>
+      <li data-cat="Science">Science</li>
+      <li data-cat="Mathematics">Math</li>
     </ul>
+
+    <!-- ⇩ quiz area (initially hidden by JS) -->
+    <section id="quiz" hidden>
+      <h2 id="question"></h2>
+      <ul id="choices"></ul>
+      <button id="quit">Quit</button>
+    </section>
   </main>
+
+  <!-- ⇩ result dialog -->
+  <dialog id="result">
+    <p>Your score: <strong id="score"></strong></p>
+    <button id="home">Back Home</button>
+  </dialog>
 
   <footer>
     <strong>&copy; 2025 Developed by Srikanth.Nagalla</strong>
   </footer>
 
+  <!-- ⇩ load the client JS -->
+  <script src="/js/app.js"></script>
 </body>
 </html>

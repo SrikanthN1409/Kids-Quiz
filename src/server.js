@@ -1,13 +1,26 @@
-import express from 'express';
-import cors from 'cors';
-import 'dotenv/config.js';
+// ✅ MUST be the first lines
+// ✅ Load environment variables BEFORE anything else
+import dotenv from 'dotenv';
 import path from 'path';
-import { fileURLToPath } from 'url';
-import quizRouter from './routes/quiz.js';
 
-// ✅ Fix __dirname in ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, '../.env') }); // 👈 load one level up
+
+console.log("✅ Loaded env in server.js:", process.env.DATABASE_URL);
+
+import express from 'express';
+import cors from 'cors';
+
+import { fileURLToPath } from 'url';
+
+import quizRouter from './routes/quiz.js';
+
+
+
+// // ✅ Fix __dirname in ES Modules
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 // ✅ Project root (go one level up from /src)
 const projectRoot = path.join(__dirname, '..');
