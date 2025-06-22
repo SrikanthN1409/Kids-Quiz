@@ -31,12 +31,6 @@ services:
       - key: MAIL_PASS
         sync: false
 
-schedules:
-  - name: daily-ai-review
-    serviceName: kids-quiz-reviewer
-    cron: "@daily"
-    command: node src/ai/reviewer.js
-
 databases:
   - name: kids-quiz-db
 
