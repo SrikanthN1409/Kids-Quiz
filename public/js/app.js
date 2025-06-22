@@ -22,14 +22,12 @@ function showQuestion() {
   ['a','b','c','d'].forEach(letter => {
     const li = document.createElement('li');
     li.textContent = q['choice_'+letter];
-    li.onclick = () => {
-      // Compare lowercase vs lowercase
-      if (letter === (q.correct || '').toLowerCase()) {
-        score++;
-      }
-      idx++;
-      showQuestion();
-    };
+   li.onclick = () => {
+  if (letter.toUpperCase() === q.correct.toUpperCase()) score++;
+  idx++;
+  showQuestion();
+};
+
     choicesEl.append(li);
   });
 }
