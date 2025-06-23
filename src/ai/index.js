@@ -14,7 +14,8 @@
 import 'dotenv/config.js';
 import OpenAI from 'openai';
 import nodemailer from 'nodemailer';
-import { pool } from '../db.js';
+import pool from '../db.js';
+
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 

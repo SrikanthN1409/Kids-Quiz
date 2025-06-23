@@ -17,10 +17,10 @@ services:
         sync: false
 
   - type: worker
-    name: kids-quiz-reviewer
+    name: kids-quiz-index
     env: node
     buildCommand: npm install
-    startCommand: node src/ai/reviewer.js
+    startCommand: node src/ai/index.js
     envVars:
       - key: DATABASE_URL
         fromDatabase:

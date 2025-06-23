@@ -16,11 +16,11 @@ services:
         sync: false
 
   - type: worker
-    name: kids-quiz-reviewer
+    name: kids-quiz-index
     env: node
     plan: free
     buildCommand: npm install
-    startCommand: node src/ai/reviewer.js
+    startCommand: node src/ai/index.js
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -33,9 +33,9 @@ services:
 
 schedules:
   - name: daily-ai-review
-    serviceName: kids-quiz-reviewer
+    serviceName: kids-quiz-index
     cron: "@daily"
-    command: node src/ai/reviewer.js
+    command: node src/ai/index.js
 
 databases:
   - name: kids-quiz-db
