@@ -1,13 +1,19 @@
 const tabs   = document.querySelectorAll('#tabs li');
-const quizDlg = document.getElementById('quiz');      // dialog now
+const quizDlg = document.getElementById('quiz');
 const questionEl = document.getElementById('question');
 const choicesEl  = document.getElementById('choices');
 const resultDlg  = document.getElementById('result');
+const startSound = new Audio('/sounds/start.mp3');
 let questions = [], idx = 0, score = 0;
 
+// ✅ When user selects a category
 tabs.forEach(tab => tab.onclick = async () => {
+  startSound.currentTime = 0;
+  startSound.play();
+
   const cat = tab.dataset.cat;
-  questions = await fetch(`/api/questions?category=${cat}&limit=10`).then(r => r.json());
+  questions = await fetch(`/api/questions?category=${cat}`)
+    .then(r => r.json());
 
   if (!questions || questions.length === 0) {
     alert(`No questions available for category: ${cat}`);
@@ -16,74 +22,85 @@ tabs.forEach(tab => tab.onclick = async () => {
 
   idx = score = 0;
   showQuestion();
-  quizDlg.showModal();  // ✅ Show the quiz in popup
+  quizDlg.showModal();
 });
 
+// ✅ Show one question at a time
 function showQuestion() {
   const q = questions[idx];
+  if (!q) return quit();
 
-  // ✅ If no more questions, close quiz and show result
-  if (!q) {
-    quizDlg.close(); // close quiz popup
-    resultDlg.showModal(); // open result
-    document.getElementById('score').textContent = `${score}/${questions.length}`;
-    return;
-  }
-  questionEl.textContent = q.body;
+  const createdAt = new Date(q.created_at);
+  const isNew = (Date.now() - createdAt.getTime()) < (24 * 60 * 60 * 1000);
+
+  questionEl.innerHTML = q.body + (isNew ? ' <span class="new-badge">🆕 New Today!</span>' : '');
+
   choicesEl.innerHTML = '';
-
   ['a','b','c','d'].forEach(letter => {
     const li = document.createElement('li');
     li.textContent = q['choice_' + letter];
 
     li.onclick = () => {
-      const sound = document.getElementById('clickSound');
-      if (sound) {
-        sound.currentTime = 0;
-        sound.play();
-      }
+      const correctLetter = q.correct.toLowerCase();
 
-      document.querySelectorAll('#choices li').forEach(item => item.onclick = null);
+      const audio = new Audio(
+        letter.toUpperCase() === q.correct.toUpperCase()
+          ? '/sounds/correct.mp3'
+          : '/sounds/wrong.mp3'
+      );
+      audio.play();
 
-      const isCorrect = (letter.toUpperCase() === q.correct.toUpperCase());
-
-      if (isCorrect) {
-        li.innerHTML += ' ✅';
-        li.classList.add('correct');
+      if (letter.toUpperCase() === q.correct.toUpperCase()) {
         score++;
-      } else {
-        li.innerHTML += ' ❌';
-        li.classList.add('wrong');
-
-        document.querySelectorAll('#choices li').forEach(otherLi => {
-          if (otherLi.textContent.trim() === q['choice_' + q.correct.toLowerCase()]) {
-            otherLi.innerHTML += ' ✅';
-            otherLi.classList.add('correct');
-          }
-        });
+        confetti({ particleCount: 120, spread: 70, origin: { y: 0.5 } });
       }
+
+      Array.from(choicesEl.children).forEach((liOption, i) => {
+        const optLetter = ['a', 'b', 'c', 'd'][i];
+        liOption.style.pointerEvents = 'none';
+
+        if (optLetter === correctLetter) {
+          liOption.innerHTML += ' ✅';
+          liOption.style.backgroundColor = '#d4fcd4';
+        } else if (liOption === li) {
+          liOption.innerHTML += ' ❌';
+          liOption.style.backgroundColor = '#ffd4d4';
+        }
+      });
 
       setTimeout(() => {
         idx++;
-        showQuestion();
+        if (idx >= questions.length) {
+          quizDlg.close();
+          const finish = new Audio('/sounds/success.mp3');
+          finish.play();
+          resultDlg.showModal();
+          document.getElementById('score').textContent = `${score}/${questions.length}`;
+        } else {
+          showQuestion();
+        }
       }, 1000);
     };
 
     choicesEl.append(li);
   });
-} 
+}
 
-// ✅ Quit closes quiz and opens score popup
+// ✅ Quit button
 document.getElementById('quit').onclick = () => {
-  quizDlg.close();       // close quiz dialog
-  resultDlg.showModal(); // open result dialog
+  quizDlg.close();
+  const finish = new Audio('/sounds/success.mp3');
+  finish.play();
+  resultDlg.showModal();
   document.getElementById('score').textContent = `${score}/${questions.length}`;
 };
 
+// ✅ Home button
 document.getElementById('home').onclick = () => {
   resultDlg.close();
 };
 
+// ✅ Fun facts and quotes
 const facts = [
   "Octopuses have three hearts!",
   "Bananas are berries, but strawberries are not!",
@@ -91,7 +108,6 @@ const facts = [
   "Sharks existed before trees!",
   "There are more stars in the universe than grains of sand on Earth."
 ];
-document.getElementById('factBox').textContent = facts[Math.floor(Math.random() * facts.length)];
 
 const quotes = [
   "You can do anything if you try!",
@@ -100,8 +116,7 @@ const quotes = [
   "Be curious. Be brave. Be kind.",
   "The more you learn, the more fun it becomes!"
 ];
-document.getElementById('factBox').textContent = quotes[Math.floor(Math.random() * quotes.length)];
 
-const showQuotes = Math.random() < 0.5;
-const content = showQuotes ? quotes : facts;
-document.getElementById('factBox').textContent = content[Math.floor(Math.random() * content.length)];
+const randomFact = facts[Math.floor(Math.random() * facts.length)];
+const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+document.getElementById('factBox').innerHTML = `<li>🌟 Fun Fact: ${randomFact}</li><li>💡 Quote: ${randomQuote}</li>`;

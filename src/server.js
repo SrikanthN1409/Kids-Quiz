@@ -36,7 +36,7 @@ app.use(express.static(path.join(projectRoot, 'public')));
 
 app.use(cors());
 app.use(express.json());
-
+app.use(express.static('public'));
 // ✅ Home route that renders index.ejs
 app.get('/', (req, res) => {
   res.render('index');

@@ -222,6 +222,21 @@ h1::before {
   animation: bounceIn 0.5s ease;
 }
 
+.new-badge {
+  background: #ff70c0;
+  color: white;
+  padding: 3px 6px;
+  border-radius: 10px;
+  font-size: 0.65rem;
+  margin-left: 8px;
+  animation: glow 1s infinite alternate;
+}
+@keyframes glow {
+  from { background-color: #ff70c0; }
+  to   { background-color: #ffa1d9; }
+}
+
+
 .moving-bird {
   position: absolute;
   top: 40px;      /* instead of bottom */
@@ -278,6 +293,49 @@ h1::before {
 #question {
   font-size: 1.5rem;
   margin: 20px 0;
+}
+
+.slate-dialog {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: #fffbe7;
+}
+#slateCanvas {
+  background: white;
+  cursor: crosshair;
+}
+.slate-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background: #fcd34d;
+}
+
+.fullscreen-popup {
+  width: 100vw;
+  height: 100vh;
+  padding: 1rem;
+  background: #fffbe9;
+  border: none;
+}
+
+dialog::backdrop {
+  background: rgba(0,0,0,0.5);
+}
+.popup-content {
+  text-align: center;
+  padding: 1em;
+}
+
+#slateCanvas {
+  border: 2px solid #444;
+  background: #fff;
+  display: block;
+  margin: 1rem auto;
+  touch-action: none;
 }
 
 #choices li {

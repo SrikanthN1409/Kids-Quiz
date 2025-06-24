@@ -1,53 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Kids Quiz</title>
- <!-- Add this in index.ejs head -->
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/styles.css?v=3"><!-- bump ?v whenever you change CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css?v=3">
 </head>
 <body class="theme">
-    <div class="page-wrapper">
-<!-- Audio element -->
- <!-- Add before </body> -->
+<div class="page-wrapper">
+<audio id="clickSound" src="/sounds/click.mp3" preload="auto"></audio>
 
+<header>
+  <div class="moving-bird">
+    <img src="/images/bird.gif" alt="bigbird" class="bird-img" />
+  </div>
 
-<audio id="clickSound" src="/sounds/click.mp3" preload="auto"></audio> 
+  <h1>🎉 Kids Quiz 🏆</h1>    
+  <div class="bird-text">Test your knowledge with fun quizzes!👇</div>
 
-  <header>
-  <h1>🎉 Kids Quiz 🦄</h1>    
   <ul id="tabs">
-   <div class="moving-bird">
-    <img src="/images/bird.gif" alt="bigbird" class="bird-img" /></div>
-    <div class="bird-text">Test your knowledge with fun quizzes!👉</div>
-  
+    <li data-cat="Family Relations">👨‍👩‍👧‍👦 Family & Relations</li>
     <li data-cat="Cartoon">🧸 Cartoon</li>
     <li data-cat="Movies">🎬 Movies</li>
     <li data-cat="Cricket">🏏 Cricket</li>
     <li data-cat="Science">🔬 Science</li>
     <li data-cat="Mathematics">➗ Math</li>
   </ul>
-  
 </header>
 
+<div class="ribbon"></div>
 
-  <div class="ribbon"></div>
+<main>
+  <section class="fun-fact">
+    <h3>🌟 Did You Know?</h3>
+    <p id="factBox">Loading a fun fact...</p>
+  </section>
+</main>
 
- 
-  <main>
-    
- <section class="fun-fact">
-  <h3>🌟 Did You Know?</h3>
-  <p id="factBox">Loading a fun fact...</p>
-</section>
-
-
-
-
-    <!-- ⇩ quiz area (initially hidden by JS) -->
-   <dialog id="quiz">
+<!-- Quiz Dialog -->
+<dialog id="quiz">
   <form method="dialog">
     <h2 id="question"></h2>
     <ul id="choices"></ul>
@@ -55,23 +49,17 @@
   </form>
 </dialog>
 
-  </main>
+<dialog id="result">
+  <h2>Quiz Complete!</h2>
+  <p>Your Score: <span id="score"></span></p>
+  <button id="home">Home</button>
+</dialog>
 
-  <!-- ⇩ result dialog -->
-  <dialog id="result">
-    <p>Your score: <strong id="score"></strong></p>
-    <button id="home">Close</button>
-  </dialog>
+<script src="/js/app.js?v=2" defer></script>
+<footer>
+  <strong > 🐻☕🧸📋🧋 &copy; 2025 Developed by Srikanth Nagalla ✡🤸‍♂️🦖☃️</strong>
+</footer>
+</div> <!-- page-wrapper -->
 
-  <footer>
-    
-    <strong>&copy; 🐳 2025 Developed by Srikanth.Nagalla</strong>
-  </footer>
-
-  <!-- ⇩ load the client JS -->
- <script src="/js/app.js?v=3"></script> <!-- or any random version -->
- </div>
 </body>
-
-
 </html>
