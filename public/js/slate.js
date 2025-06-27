@@ -88,11 +88,39 @@ function speakLetter(text, langCode) {
   utter.rate = 0.8;
   utter.pitch = 1;
   utter.volume = 1;
-  if (langCode === 'hindi') utter.lang = 'hi-IN';
-  else if (langCode === 'telugu') utter.lang = 'te-IN';
-  else utter.lang = 'en-US';
+
+  const voices = speechSynthesis.getVoices();
+
+  // Map our language codes to fallback voices
+  const langFallbacks = {
+    hindi: ['hi-IN', 'hi_IN', 'Hindi', 'en-IN'],
+    telugu: ['te-IN', 'te_IN', 'Telugu', 'en-IN'], // use en-IN as a backup
+    english: ['en-US', 'en-GB']
+  };
+
+  const tryVoices = langFallbacks[langCode] || ['en-US'];
+
+  const matchedVoice = voices.find(v =>
+    tryVoices.some(code => v.lang === code || v.name.toLowerCase().includes(code.toLowerCase()))
+  );
+
+  if (matchedVoice) {
+    utter.voice = matchedVoice;
+    utter.lang = matchedVoice.lang;
+  } else {
+    utter.lang = 'en-US'; // fallback
+  }
+
+  speechSynthesis.speak(utter);
 }
-playAudioBtn.onclick = () => speakLetter(getExpectedLetter(), selectedLanguage);
+
+
+
+playAudioBtn.onclick = () => {
+  const letter = getExpectedLetter(); // e.g. 'అ'
+  speakLetter(letter, selectedLanguage);
+};
+
 
 // === OCR Validation ===
 checkBtn.onclick = () => {
