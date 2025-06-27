@@ -1,8 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+ <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js">
+// Disable Right-Click + DevTools
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.onkeydown = function(e) {
+  if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I', 'C', 'J'].includes(e.key)) || (e.ctrlKey && e.key === 'U')) {
+    return false;
+  }
+};
+ </script>
+  <!-- <script src="https://kit.fontawesome.com/yourkit.js" crossorigin="anonymous"></script> -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Kids Quiz</title>
@@ -14,6 +24,18 @@
 <audio id="clickSound" src="/sounds/click.mp3" preload="auto"></audio>
 
 <header>
+
+  <script>
+    // 🎉 Confetti Animation
+    function celebrate() {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    }
+    document.addEventListener('DOMContentLoaded', celebrate);
+  </script>
   <div class="moving-bird">
     <img src="/images/bird.gif" alt="bigbird" class="bird-img" />
   </div>
@@ -22,12 +44,12 @@
   <div class="bird-text">Test your knowledge with fun quizzes!👇</div>
 
   <ul id="tabs">
-    <li data-cat="Family Relations">👨‍👩‍👧‍👦 Family & Relations</li>
-    <li data-cat="Cartoon">🧸 Cartoon</li>
-    <li data-cat="Movies">🎬 Movies</li>
-    <li data-cat="Cricket">🏏 Cricket</li>
-    <li data-cat="Science">🔬 Science</li>
-    <li data-cat="Mathematics">➗ Math</li>
+    <li data-cat="Family Relations">👨‍👩‍👧‍👦Family & Relations👴</li>
+    <li data-cat="Cartoon">🧸Cartoon🔮</li>
+    <li data-cat="Movies">🎬Movies🍿</li>
+    <li data-cat="Cricket">🏏Cricket\|/</li>
+    <li data-cat="Science">🔬Science🧪</li>
+    <li data-cat="Mathematics">➗Math🧮</li>
   </ul>
 </header>
 
@@ -35,10 +57,80 @@
 
 <main>
   <section class="fun-fact">
-    <h3>🌟 Did You Know?</h3>
+    <h3>🗣️ Did You Know?</h3>
     <p id="factBox">Loading a fun fact...</p>
   </section>
+
+  <!-- ⬇️ Paste here: Second Section -->
+  <section class="fun-fact">
+    <h3>👨🏻‍🏫 ✍️ My Slate - Handwriting Practice with Voice & Visuals.</h3>
+   <li>🌟 
+✅ Improves handwriting with live drawing and feedback.
+
+🔤 Teaches alphabets with letter visuals and audio pronunciation.</li>
+<li>🗣️ Voice hints encourage listening and repetition.
+
+📊 Progress tracking shows which letters are completed using ✅ and a progress bar.
+
+</li>
+<li>🎯 Boosts language learning and fine motor skills in a fun and interactive way!</li>
+    <!-- <p>Slate helps you to learn Language with audio & image.</p> -->
+    
+    <!-- ✅ Paste Step 3 Button Below -->
+
+<button id="startPractice">✍️ Start Practicing</button>
+<!-- <button id="resetProgress">🔁 Reset Progress</button> -->
+<button onclick="localStorage.removeItem('letterProgress'); location.reload()">Reset Progress</button>
+
+
+  </section>
 </main>
+
+
+<!-- Button to trigger -->
+
+
+
+<!-- Fullscreen Popup -->
+<dialog id="slateDialog" class="fullscreen-popup">
+  <div id="languageSelect">
+    <h2>Welcome to My Slate!</h2>
+    <p>Choose a language to start practicing your handwriting.</p>
+    <button class="lang-btn" data-lang="english">English</button>
+    <button class="lang-btn" data-lang="hindi">Hindi</button>
+    <button class="lang-btn" data-lang="telugu">Telugu</button>
+    <br><br>
+    <button id="closeSlate">❌ Close</button>
+  </div>
+
+  <div id="slateContent" hidden>
+    <div id="progressDisplay" style="margin: 10px 0; font-weight: bold;"></div>
+    <h2 id="letterPrompt">Draw the letter: A</h2>
+    <div id="progressArea">
+  <p id="progressStatus">Progress: 0%</p>
+  <progress id="progressBar" max="100" value="0"></progress>
+</div>
+
+    <img id="letterImage" src="" alt="⚠️ Image failed to load" style="max-height: 150px" />
+    <button id="prevLetterBtn">⬅️ Previous Letter</button>
+     <button id="nextLetterBtn">Next Letter ➡️</button>
+    <button id="speakLetterBtn">🔊 Speak</button>
+   
+
+
+    <!-- ✅ Only one canvas -->
+    <canvas id="slateCanvas" width="512" height="512"></canvas>
+
+    <button id="checkDrawing">Validate Alphabet</button>
+    <button id="clearDrawing">🧽 Clear</button>
+    <button id="closeSlateContent">Close</button>
+    <p id="drawingResult" class="feedback-box"></p>
+    <audio id="voiceInstruction" preload="auto"></audio>
+     <h6>Note:
+      <p>* Uses OCR (Tesseract.js) to recognize handwriting and provide real-time accuracy feedback.</p>
+     <p>*  Prototype - Implemented perfectly for English.Telugu and hindi letter detection code to be finetuned.</p></h6>
+  </div>
+</dialog>
 
 <!-- Quiz Dialog -->
 <dialog id="quiz">
@@ -54,12 +146,28 @@
   <p>Your Score: <span id="score"></span></p>
   <button id="home">Home</button>
 </dialog>
+<script src="https://unpkg.com/tesseract.js@v4.1.1/dist/tesseract.min.js"></script>
+
 
 <script src="/js/app.js?v=2" defer></script>
+<script src="/js/slate.js" defer></script>
+<script>
+  const img = document.getElementById('letterImage');
+  if (img) {
+    img.onerror = () => {
+      console.warn("⚠️ Image failed to load");
+      img.alt = "⚠️ Image not found";
+      img.src = "/images/fallback.png"; // ✅ Put a fallback image in this path
+    };
+  }
+</script>
+
 <footer>
-  <strong > 🐻☕🧸📋🧋 &copy; 2025 Developed by Srikanth Nagalla ✡🤸‍♂️🦖☃️</strong>
+  <strong> ☕📋🧋 &copy; 2025 Developed by Srikanth Nagalla ✡🤸‍♂️🦖</strong>
 </footer>
+
 </div> <!-- page-wrapper -->
+
 
 </body>
 </html>

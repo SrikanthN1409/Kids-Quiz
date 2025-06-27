@@ -125,6 +125,18 @@ h1::before {
   font-size: 2rem;
 }
 
+.feedback-box {
+  padding: 0.5rem;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+.feedback-box:empty {
+  display: none;
+}
+.feedback-box::before {
+  content: '🧠 ';
+}
+
 #tabs li:nth-child(1) {
   background: #ffb3ba; /* light red/pink */
 }
@@ -331,12 +343,16 @@ dialog::backdrop {
 }
 
 #slateCanvas {
-  border: 2px solid #444;
-  background: #fff;
   display: block;
-  margin: 1rem auto;
-  touch-action: none;
 }
+
+
+#slateCanvas {
+  background-color: white;
+  border: 1px solid #ccc;
+  touch-action: none; /* Prevent mobile scrolling while drawing */
+}
+
 
 #choices li {
   margin: 10px 0;
@@ -453,4 +469,50 @@ html, body {
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
+}
+
+/* Glowing popup effect after answer */
+.quiz-answered {
+  animation: popupGlow 0.6s ease-in-out;
+  border-radius: 8px;
+}
+
+@keyframes popupGlow {
+  0%   { box-shadow: 0 0 0px rgba(0, 255, 0, 0.2); }
+  50%  { box-shadow: 0 0 30px rgba(0, 255, 0, 0.6); }
+  100% { box-shadow: 0 0 0px rgba(0, 255, 0, 0.2); }
+}
+/* Green glow for correct answers */
+.quiz-correct {
+  animation: popupCorrect 0.6s ease-in-out;
+  border-radius: 8px;
+}
+
+@keyframes popupCorrect {
+  0%   { box-shadow: 0 0 0px rgba(0, 255, 0, 0.2); }
+  50%  { box-shadow: 0 0 30px rgba(0, 255, 0, 0.6); }
+  100% { box-shadow: 0 0 0px rgba(0, 255, 0, 0.2); }
+}
+
+/* Red glow for wrong answers */
+.quiz-wrong {
+  animation: popupWrong 0.6s ease-in-out;
+  border-radius: 8px;
+}
+
+@keyframes popupWrong {
+  0%   { box-shadow: 0 0 0px rgba(255, 0, 0, 0.2); }
+  50%  { box-shadow: 0 0 30px rgba(255, 0, 0, 0.6); }
+  100% { box-shadow: 0 0 0px rgba(255, 0, 0, 0.2); }
+}
+
+/* 👇 Add this to your styles.css */
+.popup-celebrate {
+  animation: flash-bg 0.8s ease-in-out;
+}
+
+@keyframes flash-bg {
+  0% { background-color: white; }
+  50% { background-color: #ffeaa7; }
+  100% { background-color: white; }
 }
