@@ -25,7 +25,7 @@ let progressMap = {};
 const lettersByLang = {
   english: [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'],
   hindi: ['अ','आ','इ','ई','उ','ऊ','ऋ','ए','ऐ','ओ','औ','अं','अः'],
-  telugu: ['అ','ఆ','ఇ','ఈ','ఉ','ఊ','ఋ','ఎ','ఏ','ఐ','ఒ','ఓ','ఔ','అం','అః']
+  telugu: [...'అఆఇఈఉఊఋఎఏఐఒఓఔఅంఅః']
 };
 const tesseractLangCodes = {
   english: 'eng',
@@ -45,10 +45,7 @@ function setupCanvas() {
   ctx.strokeStyle = 'black';
 }
 function bindCanvasEvents() {
-  
-canvas.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
-canvas.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
-
+  // Mouse Events
   canvas.onmousedown = e => {
     drawing = true;
     ctx.beginPath();
@@ -59,7 +56,7 @@ canvas.addEventListener('touchmove', e => e.preventDefault(), { passive: false }
     ctx.lineTo(e.offsetX, e.offsetY);
     ctx.stroke();
   };
- canvas.onmouseup = canvas.onmouseleave = () => drawing = false;
+  canvas.onmouseup = canvas.onmouseleave = () => drawing = false;
 
   // Touch Events
   canvas.ontouchstart = e => {
@@ -84,10 +81,11 @@ canvas.addEventListener('touchmove', e => e.preventDefault(), { passive: false }
     ctx.stroke();
   };
 
-  canvas.ontouchend = () => {
-    drawing = false;
-  };
-  
+  canvas.ontouchend = () => drawing = false;
+
+  // Prevent scroll while touching canvas
+  canvas.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+  canvas.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
 }
 function clearCanvas() {
   ctx.fillStyle = 'white';
@@ -122,10 +120,9 @@ function speakLetter(text, langCode) {
 
   const voices = speechSynthesis.getVoices();
 
-  // Map our language codes to fallback voices
   const langFallbacks = {
     hindi: ['hi-IN', 'hi_IN', 'Hindi', 'en-IN'],
-    telugu: ['te-IN', 'te_IN', 'Telugu', 'en-IN'], // use en-IN as a backup
+    telugu: ['te-IN', 'te_IN', 'Telugu', 'en-IN'],
     english: ['en-US', 'en-GB']
   };
 
@@ -139,19 +136,16 @@ function speakLetter(text, langCode) {
     utter.voice = matchedVoice;
     utter.lang = matchedVoice.lang;
   } else {
-    utter.lang = 'en-US'; // fallback
+    utter.lang = 'en-US';
   }
 
   speechSynthesis.speak(utter);
 }
 
-
-
 playAudioBtn.onclick = () => {
-  const letter = getExpectedLetter(); // e.g. 'అ'
+  const letter = getExpectedLetter();
   speakLetter(letter, selectedLanguage);
 };
-
 
 // === OCR Validation ===
 checkBtn.onclick = () => {
@@ -183,17 +177,13 @@ checkBtn.onclick = () => {
     try {
       const { data } = await Tesseract.recognize(blob, tesseractLangCodes[selectedLanguage], {
         langPath: '/tessdata',
-       logger: () => {}
-
+        logger: () => {}
       });
       const raw = data.text || '';
       const cleaned = raw.replace(/\s/g, '').trim();
       const expected = getExpectedLetter();
       const confidence = data.confidence?.toFixed(2);
-      const normalizedCleaned = cleaned.normalize('NFC');
-      const normalizedExpected = expected.normalize('NFC');
-
-      const correct = normalizedCleaned.includes(normalizedExpected);
+      const correct = cleaned.normalize('NFC').includes(expected.normalize('NFC'));
 
       resultText.textContent = correct
         ? `✅ Correct! Confidence: ${confidence}%`
@@ -229,7 +219,7 @@ prevBtn.onclick = () => {
   }
 };
 
-// === Helper Functions ===
+// === Helpers ===
 function getExpectedLetter() {
   return lettersByLang[selectedLanguage][currentIndex];
 }
@@ -251,7 +241,7 @@ function updateProgressUI() {
   letterPrompt.textContent = `Draw the letter: ${current}` + (progressMap[current] ? " ✅" : "");
 }
 
-// === Setup Content ===
+// === Setup Drawing ===
 function setupSlateContent() {
   setupCanvas();
   bindCanvasEvents();
@@ -267,7 +257,7 @@ function setupSlateContent() {
   resultText.textContent = '';
 }
 
-// === Open Slate Dialog ===
+// === Launch Slate Dialog ===
 document.getElementById('startPractice').onclick = () => {
   slatePopup.showModal();
   languageSelect.hidden = false;
@@ -277,7 +267,7 @@ document.getElementById('startPractice').onclick = () => {
   loadProgress();
 };
 
-// === Language Selection ===
+// === Language Choose ===
 document.querySelectorAll('.lang-btn').forEach(btn => {
   btn.onclick = () => {
     selectedLanguage = btn.dataset.lang;
@@ -288,7 +278,7 @@ document.querySelectorAll('.lang-btn').forEach(btn => {
   };
 });
 
-// === Close Buttons ===
+// === Close Button ===
 closeLangBtn.onclick = closeSlateBtn.onclick = () => {
   slatePopup.close();
   clearCanvas();
