@@ -25,7 +25,7 @@ let progressMap = {};
 const lettersByLang = {
   english: [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'],
   hindi: ['अ','आ','इ','ई','उ','ऊ','ऋ','ए','ऐ','ओ','औ','अं','अः'],
-  telugu: [...'అఆఇఈఉఊఋఎఏఐఒఓఔఅంఅః']
+  telugu: ['అ','ఆ','ఇ','ఈ','ఉ','ఊ','ఋ','ఎ','ఏ','ఐ','ఒ','ఓ','ఔ','అం','అః']
 };
 const tesseractLangCodes = {
   english: 'eng',
@@ -45,6 +45,10 @@ function setupCanvas() {
   ctx.strokeStyle = 'black';
 }
 function bindCanvasEvents() {
+  
+canvas.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+canvas.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+
   canvas.onmousedown = e => {
     drawing = true;
     ctx.beginPath();
@@ -55,8 +59,35 @@ function bindCanvasEvents() {
     ctx.lineTo(e.offsetX, e.offsetY);
     ctx.stroke();
   };
-  canvas.onmouseup = () => drawing = false;
-  canvas.onmouseleave = () => drawing = false;
+ canvas.onmouseup = canvas.onmouseleave = () => drawing = false;
+
+  // Touch Events
+  canvas.ontouchstart = e => {
+    e.preventDefault();
+    drawing = true;
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  };
+
+  canvas.ontouchmove = e => {
+    e.preventDefault();
+    if (!drawing) return;
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  };
+
+  canvas.ontouchend = () => {
+    drawing = false;
+  };
+  
 }
 function clearCanvas() {
   ctx.fillStyle = 'white';
@@ -88,10 +119,39 @@ function speakLetter(text, langCode) {
   utter.rate = 0.8;
   utter.pitch = 1;
   utter.volume = 1;
-  utter.lang = langCode === 'hindi' ? 'hi-IN' : langCode === 'telugu' ? 'te-IN' : 'en-US';
+
+  const voices = speechSynthesis.getVoices();
+
+  // Map our language codes to fallback voices
+  const langFallbacks = {
+    hindi: ['hi-IN', 'hi_IN', 'Hindi', 'en-IN'],
+    telugu: ['te-IN', 'te_IN', 'Telugu', 'en-IN'], // use en-IN as a backup
+    english: ['en-US', 'en-GB']
+  };
+
+  const tryVoices = langFallbacks[langCode] || ['en-US'];
+
+  const matchedVoice = voices.find(v =>
+    tryVoices.some(code => v.lang === code || v.name.toLowerCase().includes(code.toLowerCase()))
+  );
+
+  if (matchedVoice) {
+    utter.voice = matchedVoice;
+    utter.lang = matchedVoice.lang;
+  } else {
+    utter.lang = 'en-US'; // fallback
+  }
+
   speechSynthesis.speak(utter);
 }
-playAudioBtn.onclick = () => speakLetter(getExpectedLetter(), selectedLanguage);
+
+
+
+playAudioBtn.onclick = () => {
+  const letter = getExpectedLetter(); // e.g. 'అ'
+  speakLetter(letter, selectedLanguage);
+};
+
 
 // === OCR Validation ===
 checkBtn.onclick = () => {
