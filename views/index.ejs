@@ -112,14 +112,33 @@ document.onkeydown = function(e) {
 </div>
 
     <img id="letterImage" src="" alt="⚠️ Image failed to load" style="max-height: 150px" />
+    <div style="position: relative; display: inline-block;">
     <button id="prevLetterBtn">⬅️ Previous Letter</button>
      <button id="nextLetterBtn">Next Letter ➡️</button>
-    <button id="speakLetterBtn">🔊 Speak</button>
-   
-
+<button id="speakLetterBtn">🔊 Speak</button>
+<button id="hintIcon" title="Sample: Show how the validated result appears.">💡</button>
+  <!-- Reference Image shown on hover -->
+  <div id="hintImageContainer" style="
+    position: absolute;
+    top: 40px;
+    left: 0;
+    display: none;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 5px;
+    z-index: 10;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  ">
+    <img id="referenceImage" src="" alt="Letter Reference" style="height: 400px;">
+  </div>
+</div>
 
     <!-- ✅ Only one canvas -->
     <canvas id="slateCanvas" width="512" height="512"></canvas>
+<div id="hintImageContainer" style="display: none; margin-top: 10px;">
+  <img id="referenceImage" src="" alt="Letter Reference" style="max-height: 150px;">
+</div>
+
 
     <button id="checkDrawing">Validate Alphabet</button>
     <button id="clearDrawing">🧽 Clear</button>

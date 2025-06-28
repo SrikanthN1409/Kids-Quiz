@@ -1,3 +1,4 @@
+
 const slatePopup = document.getElementById('slateDialog');
 const languageSelect = document.getElementById('languageSelect');
 const slateContent = document.getElementById('slateContent');
@@ -17,6 +18,10 @@ const progressBar = document.getElementById('progressBar');
 const progressStatus = document.getElementById('progressStatus');
 const letterPrompt = document.getElementById('letterPrompt');
 
+const hintIcon = document.getElementById('hintIcon');
+const hintContainer = document.getElementById('hintImageContainer');
+const refImg = document.getElementById('referenceImage');
+
 let drawing = false;
 let selectedLanguage = '';
 let currentIndex = 0;
@@ -27,13 +32,14 @@ const lettersByLang = {
   hindi: ['अ','आ','इ','ई','उ','ऊ','ऋ','ए','ऐ','ओ','औ','अं','अः'],
   telugu: [...'అఆఇఈఉఊఋఎఏఐఒఓఔఅంఅః']
 };
+
 const tesseractLangCodes = {
   english: 'eng',
   hindi: 'hin',
   telugu: 'tel'
 };
 
-// === Setup Canvas ===
+// === Canvas Setup ===
 function setupCanvas() {
   canvas.width = 512;
   canvas.height = 512;
@@ -44,8 +50,9 @@ function setupCanvas() {
   ctx.lineCap = 'round';
   ctx.strokeStyle = 'black';
 }
+
 function bindCanvasEvents() {
-  // Mouse Events
+  // Mouse
   canvas.onmousedown = e => {
     drawing = true;
     ctx.beginPath();
@@ -58,16 +65,14 @@ function bindCanvasEvents() {
   };
   canvas.onmouseup = canvas.onmouseleave = () => drawing = false;
 
-  // Touch Events
+  // Touch
   canvas.ontouchstart = e => {
     e.preventDefault();
     drawing = true;
     const touch = e.touches[0];
     const rect = canvas.getBoundingClientRect();
-    const x = touch.clientX - rect.left;
-    const y = touch.clientY - rect.top;
     ctx.beginPath();
-    ctx.moveTo(x, y);
+    ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
   };
 
   canvas.ontouchmove = e => {
@@ -75,32 +80,26 @@ function bindCanvasEvents() {
     if (!drawing) return;
     const touch = e.touches[0];
     const rect = canvas.getBoundingClientRect();
-    const x = touch.clientX - rect.left;
-    const y = touch.clientY - rect.top;
-    ctx.lineTo(x, y);
+    ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
     ctx.stroke();
   };
 
   canvas.ontouchend = () => drawing = false;
-
-  // Prevent scroll while touching canvas
-  canvas.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
-  canvas.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
 }
+
 function clearCanvas() {
   ctx.fillStyle = 'white';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 clearBtn.onclick = clearCanvas;
 
-// === Drawing Bounds Helper ===
 function getDrawingBounds(imageData) {
   const { data, width, height } = imageData;
   let minX = width, minY = height, maxX = 0, maxY = 0;
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
-      const idx = (y * width + x) * 4;
-      if (data[idx + 3] > 10) {
+      const i = (y * width + x) * 4;
+      if (data[i + 3] > 10) {
         minX = Math.min(minX, x);
         minY = Math.min(minY, y);
         maxX = Math.max(maxX, x);
@@ -111,7 +110,6 @@ function getDrawingBounds(imageData) {
   return { minX, minY, maxX, maxY };
 }
 
-// === Speech Hint ===
 function speakLetter(text, langCode) {
   const utter = new SpeechSynthesisUtterance(text);
   utter.rate = 0.8;
@@ -119,22 +117,15 @@ function speakLetter(text, langCode) {
   utter.volume = 1;
 
   const voices = speechSynthesis.getVoices();
-
-  const langFallbacks = {
+  const fallbacks = {
     hindi: ['hi-IN', 'hi_IN', 'Hindi', 'en-IN'],
     telugu: ['te-IN', 'te_IN', 'Telugu', 'en-IN'],
     english: ['en-US', 'en-GB']
   };
-
-  const tryVoices = langFallbacks[langCode] || ['en-US'];
-
-  const matchedVoice = voices.find(v =>
-    tryVoices.some(code => v.lang === code || v.name.toLowerCase().includes(code.toLowerCase()))
-  );
-
-  if (matchedVoice) {
-    utter.voice = matchedVoice;
-    utter.lang = matchedVoice.lang;
+  const match = voices.find(v => fallbacks[langCode]?.some(code => v.lang === code || v.name.toLowerCase().includes(code.toLowerCase())));
+  if (match) {
+    utter.voice = match;
+    utter.lang = match.lang;
   } else {
     utter.lang = 'en-US';
   }
@@ -143,11 +134,9 @@ function speakLetter(text, langCode) {
 }
 
 playAudioBtn.onclick = () => {
-  const letter = getExpectedLetter();
-  speakLetter(letter, selectedLanguage);
+  speakLetter(getExpectedLetter(), selectedLanguage);
 };
 
-// === OCR Validation ===
 checkBtn.onclick = () => {
   const tempCanvas = document.createElement('canvas');
   tempCanvas.width = canvas.width;
@@ -173,15 +162,16 @@ checkBtn.onclick = () => {
   centeredCtx.fillRect(0, 0, canvas.width, canvas.height);
   centeredCtx.drawImage(canvas, minX, minY, maxX - minX, maxY - minY, offsetX, offsetY, maxX - minX, maxY - minY);
 
-  centeredCanvas.toBlob(async (blob) => {
+  centeredCanvas.toBlob(async blob => {
     try {
       const { data } = await Tesseract.recognize(blob, tesseractLangCodes[selectedLanguage], {
-        langPath: '/tessdata',
+        langPath: window.location.origin + '/tessdata',
         logger: () => {}
       });
+
+      const expected = getExpectedLetter();
       const raw = data.text || '';
       const cleaned = raw.replace(/\s/g, '').trim();
-      const expected = getExpectedLetter();
       const confidence = data.confidence?.toFixed(2);
       const correct = cleaned.normalize('NFC').includes(expected.normalize('NFC'));
 
@@ -203,7 +193,6 @@ checkBtn.onclick = () => {
   });
 };
 
-// === Navigation ===
 nextBtn.onclick = () => {
   if (currentIndex < lettersByLang[selectedLanguage].length - 1) {
     currentIndex++;
@@ -219,7 +208,6 @@ prevBtn.onclick = () => {
   }
 };
 
-// === Helpers ===
 function getExpectedLetter() {
   return lettersByLang[selectedLanguage][currentIndex];
 }
@@ -232,32 +220,55 @@ function loadProgress() {
 }
 function updateProgressUI() {
   const total = lettersByLang[selectedLanguage].length;
-  const completed = lettersByLang[selectedLanguage].filter(letter => progressMap[letter]).length;
+  const completed = lettersByLang[selectedLanguage].filter(l => progressMap[l]).length;
   progressBar.max = total;
   progressBar.value = completed;
   progressStatus.textContent = `Progress: ${Math.round((completed / total) * 100)}%`;
-
   const current = getExpectedLetter();
   letterPrompt.textContent = `Draw the letter: ${current}` + (progressMap[current] ? " ✅" : "");
 }
 
-// === Setup Drawing ===
+function updateReferenceImage() {
+  const letter = getExpectedLetter();
+  let refFilename = '';
+
+  if (selectedLanguage === 'english') {
+    refFilename = `A.png`;
+  } else if (selectedLanguage === 'hindi') {
+    refFilename = `HindiA.png`;
+  } else if (selectedLanguage === 'telugu') {
+    refFilename = `TeluguA.png`;
+  }
+  refImg.src = `/images/reference/${refFilename}`;
+  refImg.onerror = () => {
+    refImg.src = '/images/fallback.png';
+  };
+}
+
 function setupSlateContent() {
   setupCanvas();
   bindCanvasEvents();
-
   const letter = getExpectedLetter();
+
   document.getElementById('letterImage').src = `/images/${selectedLanguage}/${letter}.png`;
   document.getElementById('letterImage').onerror = () => {
     document.getElementById('letterImage').src = '/images/fallback.png';
   };
 
-  speakLetter(letter, selectedLanguage);
+  updateReferenceImage();
   updateProgressUI();
   resultText.textContent = '';
+  speakLetter(letter, selectedLanguage);
 }
 
-// === Launch Slate Dialog ===
+// Hover behavior for hint icon
+hintIcon.addEventListener('mouseenter', () => {
+  hintContainer.style.display = 'block';
+});
+hintIcon.addEventListener('mouseleave', () => {
+  hintContainer.style.display = 'none';
+});
+
 document.getElementById('startPractice').onclick = () => {
   slatePopup.showModal();
   languageSelect.hidden = false;
@@ -267,7 +278,6 @@ document.getElementById('startPractice').onclick = () => {
   loadProgress();
 };
 
-// === Language Choose ===
 document.querySelectorAll('.lang-btn').forEach(btn => {
   btn.onclick = () => {
     selectedLanguage = btn.dataset.lang;
@@ -278,7 +288,6 @@ document.querySelectorAll('.lang-btn').forEach(btn => {
   };
 });
 
-// === Close Button ===
 closeLangBtn.onclick = closeSlateBtn.onclick = () => {
   slatePopup.close();
   clearCanvas();
