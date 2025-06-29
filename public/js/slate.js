@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const correct = best === expected;
 
       drawingResult.textContent = correct
-        ? `✅ Good job! You wrote "${best}" with (${confidence}% confidence).`
+        ? `✅ Good job! You wrote "${best}" with (${100-confidence}% confidence).`
         : `❌ You wrote "${best}", try "${expected}". Try with ${100-confidence}% Confidence.`;
 
       drawingResult.style.color = correct ? 'green' : 'red';

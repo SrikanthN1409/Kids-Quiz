@@ -45,12 +45,16 @@ app.post('/api/feedback', async (req, res) => {
   if (!message || message.length < 10) {
     return res.status(400).json({ error: 'Message too short' });
   }
-
+console.log("✅ MAIL_USER:", process.env.MAIL_USER);
+console.log("✅ MAIL_PASS:", process.env.MAIL_PASS ? '*****' : 'MISSING');
+ 
   const transporter = nodemailer.createTransport({
     service: 'yahoo',
     auth: {
       user: process.env.MAIL_USER,
       pass: process.env.MAIL_PASS,
+     
+
     },
   });
 
