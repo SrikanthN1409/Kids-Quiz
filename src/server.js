@@ -2,7 +2,7 @@
 // ✅ Load environment variables BEFORE anything else
 import dotenv from 'dotenv';
 import path from 'path';
-
+import nodemailer from 'nodemailer';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, '../.env') }); // 👈 load one level up
@@ -24,7 +24,7 @@ import quizRouter from './routes/quiz.js';
 
 // ✅ Project root (go one level up from /src)
 const projectRoot = path.join(__dirname, '..');
-
+dotenv.config();
 const app = express();
 
 // ✅ View engine setup
@@ -37,6 +37,38 @@ app.use(express.static(path.join(projectRoot, 'public')));
 app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
+
+
+// ✅ Feedback email route
+app.post('/api/feedback', async (req, res) => {
+  const { message } = req.body;
+  if (!message || message.length < 10) {
+    return res.status(400).json({ error: 'Message too short' });
+  }
+
+  const transporter = nodemailer.createTransport({
+    service: 'yahoo',
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS,
+    },
+  });
+
+  try {
+    await transporter.sendMail({
+      from: `"Kids Quiz" <${process.env.MAIL_USER}>`,
+      to: process.env.MAIL_USER,
+      subject: '📩 New Feedback Submitted',
+      text: message,
+    });
+
+    res.json({ success: true, message: 'Feedback sent successfully' });
+  } catch (err) {
+    console.error('❌ Email send failed:', err);
+    res.status(500).json({ error: 'Failed to send email' });
+  }
+});
+
 // ✅ Home route that renders index.ejs
 app.get('/', (req, res) => {
   res.render('index');

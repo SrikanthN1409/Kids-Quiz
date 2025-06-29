@@ -12,16 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const playSound = (src) => {
     try {
-      const audio = new Audio(src);
-      audio.play().catch(() => {});
+      new Audio(src).play().catch(() => {});
     } catch (e) {}
   };
 
-  // ✅ Load questions when category clicked
   tabs.forEach(tab => {
     tab.onclick = async () => {
       playSound('/sounds/start.mp3');
-
       const cat = tab.dataset.cat;
       try {
         const res = await fetch(`/api/questions?category=${cat}`);
@@ -44,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   });
 
-  // ✅ Show each quiz question
   function showQuestion() {
     const q = questions[idx];
     if (!q) return quit();
@@ -67,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
         Array.from(choicesEl.children).forEach((option, i) => {
           const optLetter = ['a', 'b', 'c', 'd'][i];
           option.style.pointerEvents = 'none';
-
           if (optLetter === correctLetter) {
             option.innerHTML += ' ✅';
             option.style.backgroundColor = '#d4fcd4';
@@ -80,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isCorrect) {
           score++;
           confetti({ particleCount: 120, spread: 70, origin: { y: 0.5 } });
-
           document.body.classList.add('popup-celebrate');
           setTimeout(() => document.body.classList.remove('popup-celebrate'), 800);
         }
@@ -91,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
             quizDlg.close();
             playSound('/sounds/success.mp3');
             resultDlg.showModal();
-            if (scoreEl) scoreEl.textContent = `${score}/${questions.length}`;
+            scoreEl.textContent = `${score}/${questions.length}`;
           } else {
             showQuestion();
           }
@@ -102,27 +96,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ✅ Quit button
-  document.getElementById('quit').onclick = () => {
+  const quit = () => {
     quizDlg.close();
     playSound('/sounds/success.mp3');
     resultDlg.showModal();
     if (scoreEl) scoreEl.textContent = `${score}/${questions.length}`;
   };
 
-  // ✅ Home button
-  document.getElementById('home').onclick = () => {
-    resultDlg.close();
-  };
+  document.getElementById('quit').onclick = quit;
+  document.getElementById('home').onclick = () => resultDlg.close();
 
-  // ✅ Slate - Start Practicing
   if (startBtn && slateDialog) {
     startBtn.onclick = () => {
       slateDialog.showModal();
     };
   }
 
-  // ✅ Fun Facts
   const factBox = document.getElementById('factBox');
   if (factBox) {
     const facts = [
@@ -141,23 +130,10 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
     const randomFact = facts[Math.floor(Math.random() * facts.length)];
     const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-
     factBox.innerHTML = `<li>💡 Fun Fact: ${randomFact}</li><li>💡 Quote: ${randomQuote}</li>`;
   }
 });
 
-// ✅ Fully loaded signal
 window.addEventListener('load', () => {
   console.log("✅ Page fully loaded");
 });
-
-// 🔒 Developer Tools Deterrent (Optional)
-// document.addEventListener('contextmenu', e => e.preventDefault());
-// document.onkeydown = function (e) {
-//   if (
-//     e.key === 'F12' ||
-//     (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase()))
-//   ) {
-//     return false;
-//   }
-// };

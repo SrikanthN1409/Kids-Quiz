@@ -4,7 +4,7 @@
 <head>
 
  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js">
-// Disable Right-Click + DevTools
+// Disable Right-Click + DevTools   
 document.addEventListener('contextmenu', e => e.preventDefault());
 document.onkeydown = function(e) {
   if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I', 'C', 'J'].includes(e.key)) || (e.ctrlKey && e.key === 'U')) {
@@ -81,9 +81,17 @@ document.onkeydown = function(e) {
 <button id="startPractice">✍️ Start Practicing</button>
 <!-- <button id="resetProgress">🔁 Reset Progress</button> -->
 <button onclick="localStorage.removeItem('letterProgress'); location.reload()">Reset Progress</button>
+</section>
 
+  <section class="fun-fact" id="feedbackSection">
+  <h3>We value your feedback for better improvements!</h3>
+  <textarea id="feedbackInput" rows="4" style="width: 100%;" placeholder="Write your feedback here..."></textarea><br><br>
+  <small id="charCounter">Minimum 40 characters required.</small>
+  <button id="clearFeedback">Clear</button>
+  <button id="submitFeedback" disabled>Submit</button>
+  <p id="feedbackMsg" style="color: green; display: none;">✅ Feedback submitted successfully!</p>
+</section>
 
-  </section>
 </main>
 
 
@@ -106,48 +114,48 @@ document.onkeydown = function(e) {
   <div id="slateContent" hidden>
     <div id="progressDisplay" style="margin: 10px 0; font-weight: bold;"></div>
     <h2 id="letterPrompt">Draw the letter: A</h2>
+
     <div id="progressArea">
-  <p id="progressStatus">Progress: 0%</p>
-  <progress id="progressBar" max="100" value="0"></progress>
-</div>
+      <p id="progressStatus">Progress: 0%</p>
+      <progress id="progressBar" max="100" value="0"></progress>
+    </div>
 
-    <img id="letterImage" src="" alt="⚠️ Image failed to load" style="max-height: 150px" />
+    <img id="letterImage" src="" alt="⚠️ Image failed to load" style="max-height: 150px;" />
+
     <div style="position: relative; display: inline-block;">
-    <button id="prevLetterBtn">⬅️ Previous Letter</button>
-     <button id="nextLetterBtn">Next Letter ➡️</button>
-<button id="speakLetterBtn">🔊 Speak</button>
-<button id="hintIcon" title="Sample: Show how the validated result appears.">💡</button>
-  <!-- Reference Image shown on hover -->
-  <div id="hintImageContainer" style="
-    position: absolute;
-    top: 40px;
-    left: 0;
-    display: none;
-    background: #fff;
-    border: 1px solid #ccc;
-    padding: 5px;
-    z-index: 10;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  ">
-    <img id="referenceImage" src="" alt="Letter Reference" style="height: 400px;">
-  </div>
-</div>
+      <button id="prevLetterBtn">⬅️ Previous Letter</button>
+      <button id="nextLetterBtn">Next Letter ➡️</button>
+      <button id="speakLetterBtn">🔊 Speak</button>
+      <button id="hintIcon" title="Hint: See sample image for this language">💡</button>
 
-    <!-- ✅ Only one canvas -->
-    <canvas id="slateCanvas" width="512" height="512"></canvas>
-<div id="hintImageContainer" style="display: none; margin-top: 10px;">
-  <img id="referenceImage" src="" alt="Letter Reference" style="max-height: 150px;">
-</div>
+      <!-- Hint image container shown on hover -->
+      <div id="hintImageContainer" style="
+        position: absolute;
+        top: 40px;
+        left: 0;
+        display: none;
+        background: #fff;
+        border: 1px solid #ccc;
+        padding: 5px;
+        z-index: 10;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      ">
+        <img id="referenceImage" src="" alt="Letter Reference" style="height: 250px;">
+      </div>
+    </div>
 
+    <canvas id="slateCanvas" width="350" height="350" style="margin-top: 10px;"></canvas>
 
     <button id="checkDrawing">Validate Alphabet</button>
     <button id="clearDrawing">🧽 Clear</button>
     <button id="closeSlateContent">Close</button>
     <p id="drawingResult" class="feedback-box"></p>
     <audio id="voiceInstruction" preload="auto"></audio>
-     <h6>Note:
+
+    <h6>Note:
       <p>* Uses OCR (Tesseract.js) to recognize handwriting and provide real-time accuracy feedback.</p>
-     <p>*  Prototype - Implemented perfectly for English. Telugu and Hindi letter detection code to be finetuned.</p></h6>
+      <p>* Prototype: Fine-tuning for handwriting is ongoing and will improve in next release.</p>
+    </h6>
   </div>
 </dialog>
 
@@ -166,10 +174,32 @@ document.onkeydown = function(e) {
   <button id="home">Home</button>
 </dialog>
 <script src="https://unpkg.com/tesseract.js@v4.1.1/dist/tesseract.min.js"></script>
+<script>
 
 
-<script src="/js/app.js?v=2" defer></script>
-<script src="/js/slate.js" defer></script>
+// Clear button
+clearBtn.addEventListener('click', () => {
+  feedbackBox.value = '';
+  submitBtn.disabled = true;
+  statusMsg.style.display = 'none';
+});
+
+// Submit button
+submitBtn.addEventListener('click', () => {
+  const feedback = feedbackBox.value.trim();
+  if (feedback.length === 0) return;
+
+  // OPTIONAL: Send feedback to backend via fetch here
+  console.log("Feedback submitted:", feedback);
+
+  statusMsg.style.display = 'block';
+  feedbackBox.value = '';
+  submitBtn.disabled = true;
+});
+</script>
+
+
+
 <script>
   const img = document.getElementById('letterImage');
   if (img) {
@@ -186,7 +216,22 @@ document.onkeydown = function(e) {
 </footer>
 
 </div> <!-- page-wrapper -->
-
+<script>
+// Disable Right-Click + DevTools
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.onkeydown = function(e) {
+  if (
+    e.key === 'F12' || 
+    (e.ctrlKey && e.shiftKey && ['I', 'C', 'J'].includes(e.key)) || 
+    (e.ctrlKey && e.key === 'U')
+  ) {
+    return false;
+  }
+};
+</script>
+<script src="/js/app.js?v=2" defer></script>
+<script src="/js/slate.js" defer></script>
+<script src="/js/feedback.js" defer></script> <!-- ✅ Add this line -->
 
 </body>
 </html>

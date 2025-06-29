@@ -1,297 +1,241 @@
+document.addEventListener('DOMContentLoaded', () => {
+  const dialog = document.getElementById('slateDialog');
+  const canvas = document.getElementById('slateCanvas');
+  const ctx = canvas.getContext('2d');
+  const prompt = document.getElementById('letterPrompt');
+  const letterImg = document.getElementById('letterImage');
+  const referenceImage = document.getElementById('referenceImage');
+  const hintIcon = document.getElementById('hintIcon');
+  const hintImageContainer = document.getElementById('hintImageContainer');
+  const drawingResult = document.getElementById('drawingResult');
+  const speakBtn = document.getElementById('speakLetterBtn');
+  const clearBtn = document.getElementById('clearDrawing');
+  const checkBtn = document.getElementById('checkDrawing');
+  const closeBtn = document.getElementById('closeSlateContent');
+  const prevBtn = document.getElementById('prevLetterBtn');
+  const nextBtn = document.getElementById('nextLetterBtn');
+  const progressText = document.getElementById('progressStatus');
+  const progressBar = document.getElementById('progressBar');
+  const progressDisplay = document.getElementById('progressDisplay');
+  const langButtons = document.querySelectorAll('.lang-btn');
+  const languageScreen = document.getElementById('languageSelect');
+  const slateContent = document.getElementById('slateContent');
+  const voice = document.getElementById('voiceInstruction');
+  const startPracticeBtn = document.getElementById('startPractice');
+  const closeDialogBtn = document.getElementById('closeSlate');
 
-const slatePopup = document.getElementById('slateDialog');
-const languageSelect = document.getElementById('languageSelect');
-const slateContent = document.getElementById('slateContent');
-const canvas = document.getElementById('slateCanvas');
-const ctx = canvas.getContext('2d');
-
-const checkBtn = document.getElementById('checkDrawing');
-const clearBtn = document.getElementById('clearDrawing');
-const closeLangBtn = document.getElementById('closeSlate');
-const closeSlateBtn = document.getElementById('closeSlateContent');
-const resultText = document.getElementById('drawingResult');
-const voiceAudio = document.getElementById('voiceInstruction');
-const nextBtn = document.getElementById('nextLetterBtn');
-const prevBtn = document.getElementById('prevLetterBtn');
-const playAudioBtn = document.getElementById('speakLetterBtn');
-const progressBar = document.getElementById('progressBar');
-const progressStatus = document.getElementById('progressStatus');
-const letterPrompt = document.getElementById('letterPrompt');
-
-const hintIcon = document.getElementById('hintIcon');
-const hintContainer = document.getElementById('hintImageContainer');
-const refImg = document.getElementById('referenceImage');
-
-let drawing = false;
-let selectedLanguage = '';
-let currentIndex = 0;
-let progressMap = {};
-
-const lettersByLang = {
-  english: [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'],
-  hindi: ['अ','आ','इ','ई','उ','ऊ','ऋ','ए','ऐ','ओ','औ','अं','अः'],
-  telugu: [...'అఆఇఈఉఊఋఎఏఐఒఓఔఅంఅః']
-};
-
-const tesseractLangCodes = {
-  english: 'eng',
-  hindi: 'hin',
-  telugu: 'tel'
-};
-
-// === Canvas Setup ===
-function setupCanvas() {
-  canvas.width = 512;
-  canvas.height = 512;
-  ctx.fillStyle = 'white';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.lineWidth = 25;
-  ctx.lineJoin = 'round';
-  ctx.lineCap = 'round';
-  ctx.strokeStyle = 'black';
-}
-
-function bindCanvasEvents() {
-  // Mouse
-  canvas.onmousedown = e => {
-    drawing = true;
-    ctx.beginPath();
-    ctx.moveTo(e.offsetX, e.offsetY);
-  };
-  canvas.onmousemove = e => {
-    if (!drawing) return;
-    ctx.lineTo(e.offsetX, e.offsetY);
-    ctx.stroke();
-  };
-  canvas.onmouseup = canvas.onmouseleave = () => drawing = false;
-
-  // Touch
-  canvas.ontouchstart = e => {
-    e.preventDefault();
-    drawing = true;
-    const touch = e.touches[0];
-    const rect = canvas.getBoundingClientRect();
-    ctx.beginPath();
-    ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+  const alphabetSets = {
+    english: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''),
+    hindi: ['अ','आ','इ','ई','उ','ऊ','ऋ','ए','ऐ','ओ','औ','अं','अः'],
+    telugu: ['అ','ఆ','ఇ','ఈ','ఉ','ఊ','ఎ','ఏ','ఐ','ఒ','ఓ','ఔ','అం','అః']
   };
 
-  canvas.ontouchmove = e => {
-    e.preventDefault();
-    if (!drawing) return;
-    const touch = e.touches[0];
-    const rect = canvas.getBoundingClientRect();
-    ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
-    ctx.stroke();
-  };
+  let lang = 'english';
+  let letters = [];
+  let index = 0;
+  let drawing = false;
 
-  canvas.ontouchend = () => drawing = false;
-}
+  const progressKey = 'letterProgress';
 
-function clearCanvas() {
-  ctx.fillStyle = 'white';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-}
-clearBtn.onclick = clearCanvas;
-
-function getDrawingBounds(imageData) {
-  const { data, width, height } = imageData;
-  let minX = width, minY = height, maxX = 0, maxY = 0;
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      const i = (y * width + x) * 4;
-      if (data[i + 3] > 10) {
-        minX = Math.min(minX, x);
-        minY = Math.min(minY, y);
-        maxX = Math.max(maxX, x);
-        maxY = Math.max(maxY, y);
-      }
-    }
+  function loadProgress() {
+    const saved = localStorage.getItem(progressKey);
+    return saved ? JSON.parse(saved) : {};
   }
-  return { minX, minY, maxX, maxY };
-}
 
-function speakLetter(text, langCode) {
+  function saveProgress(progress) {
+    localStorage.setItem(progressKey, JSON.stringify(progress));
+  }
+
+  function updateProgressBar() {
+    const progress = loadProgress();
+    const done = letters.filter(l => progress[`${lang}_${l}`]);
+    const percent = Math.round((done.length / letters.length) * 100);
+    progressText.textContent = `Progress: ${percent}%`;
+    progressBar.value = percent;
+    progressDisplay.innerHTML = `✅ Completed: ${done.length}/${letters.length}`;
+  }
+
+  function speak(text) {
   const utter = new SpeechSynthesisUtterance(text);
-  utter.rate = 0.8;
-  utter.pitch = 1;
-  utter.volume = 1;
-
   const voices = speechSynthesis.getVoices();
-  const fallbacks = {
-    hindi: ['hi-IN', 'hi_IN', 'Hindi', 'en-IN'],
-    telugu: ['te-IN', 'te_IN', 'Telugu', 'en-IN'],
-    english: ['en-US', 'en-GB']
-  };
-  const match = voices.find(v => fallbacks[langCode]?.some(code => v.lang === code || v.name.toLowerCase().includes(code.toLowerCase())));
-  if (match) {
-    utter.voice = match;
-    utter.lang = match.lang;
+
+  if (lang === 'hindi') {
+    utter.lang = 'hi-IN';
+  } else if (lang === 'telugu') {
+    utter.lang = 'te-IN';
   } else {
     utter.lang = 'en-US';
   }
 
-  speechSynthesis.speak(utter);
+  // Try to find a matching voice
+  const voice = voices.find(v => v.lang === utter.lang);
+
+  if (voice) {
+    utter.voice = voice;
+    speechSynthesis.speak(utter);
+  } else if (lang === 'telugu') {
+    // 🗣️ Fallback to audio file if Telugu voice is missing
+    const audio = new Audio(`/audio/telugu/${text}.mp3`);
+    audio.play().catch(err => console.warn('⚠️ Telugu audio fallback failed:', err));
+  } else {
+    // Fallback to default
+    speechSynthesis.speak(utter);
+  }
 }
 
-playAudioBtn.onclick = () => {
-  speakLetter(getExpectedLetter(), selectedLanguage);
-};
 
-checkBtn.onclick = () => {
-  const tempCanvas = document.createElement('canvas');
-  tempCanvas.width = canvas.width;
-  tempCanvas.height = canvas.height;
-  const tempCtx = tempCanvas.getContext('2d');
-  tempCtx.drawImage(canvas, 0, 0);
-  const imageData = tempCtx.getImageData(0, 0, canvas.width, canvas.height);
-  const { minX, minY, maxX, maxY } = getDrawingBounds(imageData);
+  function showLetter() {
+    const letter = letters[index];
+    prompt.textContent = `Draw the letter: ${letter}`;
+    speak(letter);
 
-  if ((maxX - minX) <= 0 || (maxY - minY) <= 0) {
-    resultText.textContent = "⚠️ Please draw something.";
-    return;
+    // Letter drawing image
+    letterImg.src = `/images/${lang}/${letter}.png`;
+    letterImg.onerror = () => {
+      letterImg.src = '/images/fallback.png';
+    };
+
+    // Static reference image per language
+    referenceImage.src = `/images/${lang}/Aref.png`;
+
+    drawingResult.textContent = '';
+    drawingResult.className = 'feedback-box';
+
+    updateProgressBar();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 
-  const offsetX = (canvas.width - (maxX - minX)) / 2 - minX;
-  const offsetY = (canvas.height - (maxY - minY)) / 2 - minY;
+  function validateDrawing() {
+    Tesseract.recognize(canvas, lang === 'hindi' ? 'hin' : lang === 'telugu' ? 'tel' : 'eng', {
+      tessedit_char_whitelist: letters.join(''),
+      langPath: '/tessdata'
+    }).then(result => {
+      const text = result.data.text.replace(/\s/g, '');
+      const best = text[0] || 'nothing';
+      const confidence = result.data.confidence.toFixed(2);
+      const expected = letters[index];
+      const correct = best === expected;
 
-  const centeredCanvas = document.createElement('canvas');
-  centeredCanvas.width = canvas.width;
-  centeredCanvas.height = canvas.height;
-  const centeredCtx = centeredCanvas.getContext('2d');
-  centeredCtx.fillStyle = 'white';
-  centeredCtx.fillRect(0, 0, canvas.width, canvas.height);
-  centeredCtx.drawImage(canvas, minX, minY, maxX - minX, maxY - minY, offsetX, offsetY, maxX - minX, maxY - minY);
+      drawingResult.textContent = correct
+        ? `✅ Good job! You wrote "${best}" with (${confidence}% confidence).`
+        : `❌ You wrote "${best}", try "${expected}". Try with ${100-confidence}% Confidence.`;
 
-  centeredCanvas.toBlob(async blob => {
-    try {
-      const { data } = await Tesseract.recognize(blob, tesseractLangCodes[selectedLanguage], {
-        langPath: window.location.origin + '/tessdata',
-        logger: () => {}
-      });
-
-      const expected = getExpectedLetter();
-      const raw = data.text || '';
-      const cleaned = raw.replace(/\s/g, '').trim();
-      const confidence = data.confidence?.toFixed(2);
-      const correct = cleaned.normalize('NFC').includes(expected.normalize('NFC'));
-
-      resultText.textContent = correct
-        ? `✅ Correct! Confidence: ${confidence}%`
-        : `❌ You wrote "${cleaned || 'nothing'}", try "${expected}". Try with ${confidence}% Confidence.`;
-
+      drawingResult.style.color = correct ? 'green' : 'red';
       new Audio(correct ? '/sounds/correct.mp3' : '/sounds/wrong.mp3').play();
 
       if (correct) {
-        progressMap[expected] = true;
-        saveProgress();
-        updateProgressUI();
+        const progress = loadProgress();
+        progress[`${lang}_${expected}`] = true;
+        saveProgress(progress);
+        updateProgressBar();
       }
-    } catch (err) {
-      console.error("OCR Error:", err);
-      resultText.textContent = "⚠️ Couldn’t recognize the letter. Try again.";
+    }).catch(err => {
+      drawingResult.textContent = '❌ Error recognizing text.';
+      drawingResult.style.color = 'red';
+      console.error(err);
+    });
+  }
+
+  function setupDrawing() {
+    let lastX = 0, lastY = 0;
+    const draw = (x, y) => {
+      ctx.lineWidth = 12;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = 'black';
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+      [lastX, lastY] = [x, y];
+    };
+
+    canvas.addEventListener('mousedown', e => {
+      drawing = true;
+      [lastX, lastY] = [e.offsetX, e.offsetY];
+    });
+    canvas.addEventListener('mousemove', e => {
+      if (!drawing) return;
+      draw(e.offsetX, e.offsetY);
+    });
+    canvas.addEventListener('mouseup', () => drawing = false);
+    canvas.addEventListener('mouseleave', () => drawing = false);
+
+    canvas.addEventListener('touchstart', e => {
+      e.preventDefault();
+      drawing = true;
+      const rect = canvas.getBoundingClientRect();
+      const touch = e.touches[0];
+      [lastX, lastY] = [touch.clientX - rect.left, touch.clientY - rect.top];
+    }, { passive: false });
+
+    canvas.addEventListener('touchmove', e => {
+      if (!drawing) return;
+      e.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      const touch = e.touches[0];
+      draw(touch.clientX - rect.left, touch.clientY - rect.top);
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', () => drawing = false);
+  }
+
+  setupDrawing();
+
+  // Event handlers
+  checkBtn.onclick = validateDrawing;
+
+  clearBtn.onclick = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawingResult.textContent = '';
+  };
+
+  closeBtn.onclick = () => {
+    slateContent.hidden = true;
+    languageScreen.hidden = false;
+  };
+
+  speakBtn.onclick = () => speak(letters[index]);
+
+  prevBtn.onclick = () => {
+    if (index > 0) {
+      index--;
+      showLetter();
     }
+  };
+
+  nextBtn.onclick = () => {
+    if (index < letters.length - 1) {
+      index++;
+      showLetter();
+    }
+  };
+
+  hintIcon.addEventListener('mouseenter', () => {
+    hintImageContainer.style.display = 'block';
   });
-};
+  hintIcon.addEventListener('mouseleave', () => {
+    hintImageContainer.style.display = 'none';
+  });
 
-nextBtn.onclick = () => {
-  if (currentIndex < lettersByLang[selectedLanguage].length - 1) {
-    currentIndex++;
-    setupSlateContent();
-  } else {
-    alert("🎉 You’ve completed all letters!");
-  }
-};
-prevBtn.onclick = () => {
-  if (currentIndex > 0) {
-    currentIndex--;
-    setupSlateContent();
-  }
-};
+  langButtons.forEach(btn => {
+    btn.onclick = () => {
+      lang = btn.dataset.lang;
+      letters = alphabetSets[lang];
+      index = 0;
+      languageScreen.hidden = true;
+      slateContent.hidden = false;
+      showLetter();
+    };
+  });
 
-function getExpectedLetter() {
-  return lettersByLang[selectedLanguage][currentIndex];
-}
-function saveProgress() {
-  localStorage.setItem("letterProgress", JSON.stringify(progressMap));
-}
-function loadProgress() {
-  const stored = localStorage.getItem("letterProgress");
-  progressMap = stored ? JSON.parse(stored) : {};
-}
-function updateProgressUI() {
-  const total = lettersByLang[selectedLanguage].length;
-  const completed = lettersByLang[selectedLanguage].filter(l => progressMap[l]).length;
-  progressBar.max = total;
-  progressBar.value = completed;
-  progressStatus.textContent = `Progress: ${Math.round((completed / total) * 100)}%`;
-  const current = getExpectedLetter();
-  letterPrompt.textContent = `Draw the letter: ${current}` + (progressMap[current] ? " ✅" : "");
-}
-
-function updateReferenceImage() {
-  const letter = getExpectedLetter();
-  let refFilename = '';
-
-  if (selectedLanguage === 'english') {
-    refFilename = `A.png`;
-  } else if (selectedLanguage === 'hindi') {
-    refFilename = `HindiA.png`;
-  } else if (selectedLanguage === 'telugu') {
-    refFilename = `TeluguA.png`;
-  }
-  refImg.src = `/images/reference/${refFilename}`;
-  refImg.onerror = () => {
-    refImg.src = '/images/fallback.png';
-  };
-}
-
-function setupSlateContent() {
-  setupCanvas();
-  bindCanvasEvents();
-  const letter = getExpectedLetter();
-
-  document.getElementById('letterImage').src = `/images/${selectedLanguage}/${letter}.png`;
-  document.getElementById('letterImage').onerror = () => {
-    document.getElementById('letterImage').src = '/images/fallback.png';
+  document.getElementById('startPractice').onclick = () => {
+    dialog.showModal();
+    languageScreen.hidden = false;
+    slateContent.hidden = true;
   };
 
-  updateReferenceImage();
-  updateProgressUI();
-  resultText.textContent = '';
-  speakLetter(letter, selectedLanguage);
-}
-
-// Hover behavior for hint icon
-hintIcon.addEventListener('mouseenter', () => {
-  hintContainer.style.display = 'block';
-});
-hintIcon.addEventListener('mouseleave', () => {
-  hintContainer.style.display = 'none';
-});
-
-document.getElementById('startPractice').onclick = () => {
-  slatePopup.showModal();
-  languageSelect.hidden = false;
-  slateContent.hidden = true;
-  resultText.textContent = '';
-  currentIndex = 0;
-  loadProgress();
-};
-
-document.querySelectorAll('.lang-btn').forEach(btn => {
-  btn.onclick = () => {
-    selectedLanguage = btn.dataset.lang;
-    languageSelect.hidden = true;
-    slateContent.hidden = false;
-    currentIndex = 0;
-    setupSlateContent();
+  closeDialogBtn.onclick = () => {
+    dialog.close();
   };
 });
 
-closeLangBtn.onclick = closeSlateBtn.onclick = () => {
-  slatePopup.close();
-  clearCanvas();
-  resultText.textContent = '';
-  slateContent.hidden = true;
-  languageSelect.hidden = false;
-};
