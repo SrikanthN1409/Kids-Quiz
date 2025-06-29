@@ -119,14 +119,54 @@ document.addEventListener('DOMContentLoaded', () => {
       "Bananas are berries, but strawberries are not!",
       "Sharks existed before trees!",
       "Flamingos are naturally white but turn pink from food!",
-      "Honey never spoils — it lasts forever!"
+      "Honey never spoils — it lasts forever!",
+      "Shrimp's hearts are in their heads!",
+      "A group of flamingos is called a 'flamboyance'!",
+      "Cows have best friends and get stressed when separated!",
+      "A snail can sleep for three years!",
+      "A jiffy is an actual unit of time: 1/100th of a second!",
+      "Butterflies taste with their feet!",
+      "A group of owls is called a 'parliament'!",
+      "Koalas have fingerprints almost identical to humans!",
+      "A blue whale's heart is as big as a small car!",
+      "Sloths can hold their breath longer than dolphins!",
+      "The Eiffel Tower can be 15 cm taller during summer!",
+      "A group of jellyfish is called a 'smack'!",
+      "A day on Mercury lasts 59 Earth days!",
+      "Cheetahs can't roar, but they can purr!",
+      "A group of frogs is called an 'army'!",
+      "A group of crows is called a 'murder'."
+
+
     ];
     const quotes = [
       "You can do anything if you try!",
       "Every expert was once a beginner.",
       "Mistakes are proof that you are learning.",
       "Be curious. Be brave. Be kind.",
-      "The more you learn, the more fun it becomes!"
+      "The more you learn, the more fun it becomes!",
+      "Believe in yourself and all that you are.",
+      "You are capable of amazing things.",
+      "Your only limit is your mind.",
+      "Dream big and dare to fail.",
+      "The future belongs to those who believe in the beauty of their dreams.",
+      "Success is not the key to happiness. Happiness is the key to success.",
+      "Keep going. Your hardest times often lead to the greatest moments of your life.",
+      "Believe you can and you're halfway there.",
+      "Don't watch the clock; do what it does. Keep going.",
+      "The only way to do great work is to love what you do.",
+      "The best time to plant a tree was 20 years ago. The second best time is now.",
+      "You are never too old to set another goal or to dream a new dream.",
+      "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+      "What lies behind us and what lies before us are tiny matters compared to what lies within us.",
+      "The only limit to our realization of tomorrow will be our doubts of today.", 
+      "Act as if what you do makes a difference. It does.",
+      "Success usually comes to those who are too busy to be looking for it.",
+      "The only way to achieve the impossible is to believe it is possible.",
+      "You are braver than you believe, stronger than you seem, and smarter than you think.",
+      "The future belongs to those who prepare for it today.",
+      "Your life is your story, and the adventure ahead of you is the journey to fulfill your own purpose and potential.",
+      "The best way to predict the future is to create it."
     ];
     const randomFact = facts[Math.floor(Math.random() * facts.length)];
     const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
