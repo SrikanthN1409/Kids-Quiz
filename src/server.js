@@ -27,6 +27,13 @@ const projectRoot = path.join(__dirname, '..');
 dotenv.config();
 const app = express();
 
+app.use((req, res, next) => {
+  if (req.headers['x-forwarded-proto'] !== 'https') {
+    return res.redirect('https://' + req.headers.host + req.url);
+  }
+  next();
+});
+
 // ✅ View engine setup
 app.set('view engine', 'ejs');
 app.set('views', path.join(projectRoot, 'views')); // points to /views
@@ -45,8 +52,12 @@ app.post('/api/feedback', async (req, res) => {
   if (!message || message.length < 10) {
     return res.status(400).json({ error: 'Message too short' });
   }
-console.log("✅ MAIL_USER:", process.env.MAIL_USER);
-console.log("✅ MAIL_PASS:", process.env.MAIL_PASS ? '*****' : 'MISSING');
+if (!process.env.MAIL_USER || !process.env.MAIL_PASS) {
+  console.warn("⚠️ Email credentials missing.");
+} else {
+  console.log("✅ Email system ready.");
+}
+
  
   const transporter = nodemailer.createTransport({
     service: 'yahoo',
