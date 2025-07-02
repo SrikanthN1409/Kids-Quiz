@@ -49,25 +49,25 @@ app.use(express.json());
 // ✅ Unified hit counter using POST with unique visitorId
 // ✅ server.js (or route file)
 // ✅ This route only returns count without increment
-app.get('/api/hit-count', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT count FROM site_hits WHERE id = 1');
-    res.json({ count: result.rows[0].count });
-  } catch (err) {
-    console.error('Error getting hit count:', err);
-    res.status(500).json({ error: 'Internal error' });
-  }
-});
-
-// ✅ This route increments count only on first visit
+// Hit counter (add AFTER defining `app` and `pool`)
 app.get('/api/hit', async (req, res) => {
   try {
     await pool.query('UPDATE site_hits SET count = count + 1 WHERE id = 1');
     const result = await pool.query('SELECT count FROM site_hits WHERE id = 1');
     res.json({ count: result.rows[0].count });
   } catch (err) {
-    console.error('Error updating hits:', err);
-    res.status(500).json({ error: 'Internal error' });
+    console.error('Error incrementing hit count:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/api/hit-count', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT count FROM site_hits WHERE id = 1');
+    res.json({ count: result.rows[0].count });
+  } catch (err) {
+    console.error('Error fetching hit count:', err);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

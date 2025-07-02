@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
 <head>
   <!-- Google tag (gtag.js) -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CBJX78CZG7"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -210,26 +211,32 @@
 
 </div> <!-- page-wrapper -->
 <script>
-   if (!document.cookie.includes('visited=true')) {
-  fetch('/api/hit')
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById('hitCount').textContent = data.count;
-      document.cookie = "visited=true; max-age=" + (60 * 60 * 24 * 365) + "; path=/";
-    });
+  const hitCountEl = document.getElementById('hitCount');
+
+  if (!document.cookie.includes('visited=true')) {
+    fetch('/api/hit')
+      .then(res => res.json())
+      .then(data => {
+        hitCountEl.textContent = data.count;
+        document.cookie = "visited=true; max-age=" + (60 * 60 * 24 * 365) + "; path=/";
+      })
+      .catch(err => {
+        console.warn('Could not increment hit count', err);
+        hitCountEl.textContent = 'N/A';
+      });
   } else {
-    // Already visited, just fetch count to display
     fetch('/api/hit-count')
       .then(res => res.json())
       .then(data => {
-        document.getElementById('hitCount').textContent = data.count;
+        hitCountEl.textContent = data.count;
       })
-    .catch(err => {
-      console.warn('Could not fetch hit count', err);
-      document.getElementById('hitCount').textContent = 'N/A';
-    });
+      .catch(err => {
+        console.warn('Could not fetch hit count', err);
+        hitCountEl.textContent = 'N/A';
+      });
   }
 </script>
+
 
 <script src="/js/app.js?v=2" defer></script>
 <script src="/js/slate.js" defer></script>
