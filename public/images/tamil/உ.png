@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg3239"
+   version="1.1"
+   inkscape:version="0.47 r22583"
+   width="200"
+   height="154"
+   sodipodi:docname="Tamil-alphabet-உஉ.svg">
+  <metadata
+     id="metadata3245">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs3243">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       id="perspective3247" />
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="481"
+     id="namedview3241"
+     showgrid="false"
+     inkscape:zoom="1.5324675"
+     inkscape:cx="125.59782"
+     inkscape:cy="76.999998"
+     inkscape:window-x="149"
+     inkscape:window-y="263"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg3239" />
+  <path
+     style="fill:#000000"
+     d="m 10.742872,113.55508 c 0.0112,-11.50181 3.63059,-17.276102 11.99442,-19.135352 2.475,-0.55018 10.35,-1.28883 17.5,-1.64144 15.11513,-0.74542 21.51852,-2.2552 27.28664,-6.4336 5.95641,-4.31481 8.46246,-9.78742 9.00485,-19.66451 0.7371,-13.42261 -2.98969,-20.166806 -13.544,-24.509967 -4.84959,-1.995632 -7.46597,-2.36489 -16.74749,-2.363629 -12.50994,0.0017 -16.63812,1.474967 -22.34468,7.974387 -3.69464,4.207964 -4.25495,6.905789 -0.75048,3.613516 7.07201,-6.643811 23.36045,-4.059338 28.68189,4.550931 5.03226,8.142372 1.85625,22.168882 -6.06461,26.783682 -4.42995,2.58096 -15.62068,2.66698 -21.52212,0.16544 -8.72715,-3.69932 -11.90928,-9.38573 -11.85677,-21.18785 0.0678,-15.233152 10.41816,-25.590075 28.48102,-28.499014 7.10465,-1.144172 20.64855,0.12932 28.56427,2.685811 6.22312,2.009845 13.58895,7.36267 16.79215,12.203035 5.10117,7.708376 5.38486,23.730428 0.58504,33.041358 -5.68754,11.03299 -18.57264,16.81076 -39.56571,17.74155 -20.18596,0.895 -21.5,1.444892 -21.5,8.997082 l 0,4.42857 81.999998,0 82,0 0,3.5 0,3.5 -89.5,0 -89.499998,0 0.006,-5.75 z m 26.01443,-36.760342 c 3.87882,-2.00582 4.97999,-4.32774 4.97999,-10.50083 0,-4.35067 -0.45017,-5.592838 -2.92308,-8.065744 -2.28996,-2.289965 -3.82034,-2.923077 -7.06574,-2.923077 -2.27847,0 -5.00842,0.46334 -6.06657,1.029644 -2.84442,1.522289 -4.94759,6.295157 -4.92238,11.170697 0.0448,8.65426 8.13806,13.35373 15.99778,9.28931 z"
+     id="path3269" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer7"
+     inkscape:label="Layer" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer8"
+     inkscape:label="Layer#1" />
+</svg>

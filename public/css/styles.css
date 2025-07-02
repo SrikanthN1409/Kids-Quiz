@@ -372,13 +372,253 @@ dialog::backdrop {
 #slateCanvas {
   display: block;
 }
+#languageSelect {
+  text-align: center;
+  padding: 2rem;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background-color: #fef9ef;
+  border-radius: 10px;
+}
+
+#languageSelect h1 {
+  font-size: 2em;
+  margin-bottom: 0.5em;
+  color: #333;
+}
+
+.hit-stats {
+  text-align: center;
+  color: #444;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.lang-btn {
+  margin: 0.4em;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  border-radius: 8px;
+  background-color: #e8f0fe;
+  border: 2px solid #90caf9;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.lang-btn:hover {
+  background-color: #bbdefb;
+}
+#slateContent {
+  padding: 1.5rem;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background-color: #fff8e1;
+  border-radius: 10px;
+}
+
+#letterPrompt {
+  font-size: 1.6em;
+  font-weight: bold;
+  margin-bottom: 0.6em;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+#progressDisplay {
+  font-size: 1em;
+  margin-bottom: 0.8em;
+  color: green;
+}
+
+#letterImage {
+  width: 180px;
+  height: 180px;
+  margin-bottom: 1em;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.canvas-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+#slateCanvas {
+  border: 2px solid #000;
+  border-radius: 10px;
+  background-color: white;
+  touch-action: none;
+}
+
+.controls {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.controls button {
+  padding: 0.5em 1em;
+  font-size: 1em;
+  background-color: #e0f7fa;
+  border: 1px solid #00acc1;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+#mainControls {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+#mainControls button {
+  padding: 0.6em 1.2em;
+  font-size: 1.1em;
+  background-color: #ffe082;
+  border: 2px solid #ffb300;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+@media (max-width: 768px) {
+  .canvas-section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #letterImage, #slateCanvas {
+    width: 90vw;
+    max-width: 360px;
+    height: auto;
+  }
+
+  .side-cheer {
+  position: fixed;
+  top: 30%;
+  width: 100px;
+  font-size: 2rem;
+  z-index: 50;
+  text-align: center;
+  animation: float 4s ease-in-out infinite;
+}
+.side-cheer.left {
+  left: 10px;
+}
+.side-cheer.right {
+  right: 10px;
+}
+
+.bubble {
+  background-color: #fff3cd;
+  color: #333;
+  border-radius: 10px;
+  padding: 0.5rem;
+  font-size: 0.75rem;
+  margin-top: 0.4rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+  #mainControls {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+#mainControls button:hover {
+  background-color: #ffd54f;
+}
+
+.controls button:hover {
+  background-color: #b2ebf2;
+}
+
+#closeSlate {
+  margin-top: 2rem;
+  font-size: 1em;
+  padding: 0.5em 1.2em;
+  background-color: #ffcdd2;
+  color: #b71c1c;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.flying-plane {
+  position: fixed;
+  width: 100px;  /* 👈 adjust this */
+  height: auto;
+}
+
+
+/* Plane 1: Left to right */
+.plane-right-to-left {
+  top: 40%;
+  right: -50px;
+  animation: fly-left 20s linear infinite;
+}
+
+/* Plane 2: Right to left */
+.plane-left-to-right {
+  top: 70%;
+  right: -50px;
+  transform: scaleX(-1); /* Flip horizontally */
+  animation: fly-right 20s linear infinite;
+}
+
+@keyframes fly-right {
+  0% {
+    left: -60px;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    left: 100vw;
+    opacity: 1;
+  }
+  100% {
+    left: 100vw;
+    opacity: 0;
+  }
+}
+
+@keyframes fly-left {
+  0% {
+    right: -60px;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    right: 100vw;
+    opacity: 1;
+  }
+  100% {
+    right: 100vw;
+    opacity: 0;
+  }
+}
 
 
 #slateCanvas {
-  background-color: white;
-  border: 1px solid #ccc;
-  touch-action: none; /* Prevent mobile scrolling while drawing */
+  width: 100%;
+  height: auto;
+  max-width: 400px;
+  aspect-ratio: 1 / 1;
+  border: 2px solid #ccc;
+  touch-action: none;
 }
+
 
 
 #choices li {

@@ -2,21 +2,22 @@
 <html lang="en">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CBJX78CZG7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CBJX78CZG7');
+</script>
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
-<meta name="description" content="Fun and educational quizzes & handwriting practice for kids in English, Hindi, and Telugu. Boost learning with interactive games!">
-<meta name="keywords" content="kids quiz, handwriting practice, fun learning, educational games, alphabets, Hindi, Telugu, English for kids">
+<meta name="description" content="Fun and educational quizzes & handwriting practice for kids in English, Hindi, Malayalam, Kannada, Tamil, Oriya, Bengali, Punjabi, Gujarati, Assamese, Maithili, Santali, Urdu and Telugu. Boost learning with interactive games!">
+<meta name="keywords" content="kids quiz, handwriting practice, fun learning, educational games, alphabets, Hindi, Malayalam, Kannada, Tamil, Oriya, Bengali, Punjabi, Gujarati, Assamese, Maithili, Santali, Urdu, Telugu, English for kids">
 <meta name="author" content="Srikanth Nagalla">
 <link rel="canonical" href="https://www.kids-adda.fun/">
 
- <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js">
-// Disable Right-Click + DevTools   
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.onkeydown = function(e) {
-  if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I', 'C', 'J'].includes(e.key)) || (e.ctrlKey && e.key === 'U')) {
-    return false;
-  }
-};
- </script>
+
   <!-- <script src="https://kit.fontawesome.com/yourkit.js" crossorigin="anonymous"></script> -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -26,7 +27,7 @@ document.onkeydown = function(e) {
 </head>
 <body class="theme">
 <div class="page-wrapper">
-<audio id="clickSound" src="/sounds/click.mp3" preload="auto"></audio>
+
 
 <header>
 
@@ -61,6 +62,7 @@ document.onkeydown = function(e) {
 <div class="ribbon"></div>
 
 <main>
+  
   <section class="fun-fact">
     <h3>🗣️ Did You Know?</h3>
     <p id="factBox">Loading a fun fact...</p>
@@ -68,24 +70,22 @@ document.onkeydown = function(e) {
 
   <!-- ⬇️ Paste here: Second Section -->
   <section class="fun-fact">
-    <h3>👨🏻‍🏫 ✍️ My Slate - Handwriting Practice with Voice & Visuals.</h3>
-   <li>🌟 
-✅ Improves handwriting with live drawing and feedback.
-
-🔤 Teaches alphabets with letter visuals and audio pronunciation.</li>
-<li>🗣️ Voice hints encourage listening and repetition.
-
+    <h3>👨🏻‍🏫 ✍️ My Slate - 🔤 Teaches alphabets with Voice & Visuals.</h3>
+   <li>🌟 Improves handwriting with live drawing and feedback.
+</li>
+<li>🎨 Interactive canvas lets kids draw letters and get instant feedback.
 📊 Progress tracking shows which letters are completed using ✅ and a progress bar.
-
 </li>
 <li>🎯 Boosts language learning and fine motor skills in a fun and interactive way!</li>
     <!-- <p>Slate helps you to learn Language with audio & image.</p> -->
     
     <!-- ✅ Paste Step 3 Button Below -->
 
-<button id="startPractice">✍️ Start Practicing</button>
-<!-- <button id="resetProgress">🔁 Reset Progress</button> -->
-<button onclick="localStorage.removeItem('letterProgress'); location.reload()">Reset Progress</button>
+<div id="mainControls">
+  <button id="startPractice">✍️ Start Practicing</button>
+  <button onclick="localStorage.clear(); location.reload();">🔄 Reset Progress</button>
+</div>
+
 </section>
 
   <section class="fun-fact" id="feedbackSection">
@@ -112,6 +112,15 @@ document.onkeydown = function(e) {
     <button class="lang-btn" data-lang="english">English</button>
     <button class="lang-btn" data-lang="hindi">Hindi</button>
     <button class="lang-btn" data-lang="telugu">Telugu</button>
+    <button class="lang-btn" data-lang="kannada">Kannada</button>
+    <button class="lang-btn" data-lang="tamil">Tamil</button>
+    <button class="lang-btn" data-lang="malayalam">Malayalam</button>
+    <button class="lang-btn" data-lang="oriya">Oriya</button>
+    <button class="lang-btn" data-lang="bengali">Bengali</button>
+    <button class="lang-btn" data-lang="gujarati">Gujarati</button>
+    <button class="lang-btn" data-lang="assamese">Assamese</button> 
+  
+  
     <br><br>
     <button id="closeSlate">❌ Close</button>
   </div>
@@ -179,30 +188,6 @@ document.onkeydown = function(e) {
   <button id="home">Home</button>
 </dialog>
 <script src="https://unpkg.com/tesseract.js@v4.1.1/dist/tesseract.min.js"></script>
-<script>
-
-
-// Clear button
-clearBtn.addEventListener('click', () => {
-  feedbackBox.value = '';
-  submitBtn.disabled = true;
-  statusMsg.style.display = 'none';
-});
-
-// Submit button
-submitBtn.addEventListener('click', () => {
-  const feedback = feedbackBox.value.trim();
-  if (feedback.length === 0) return;
-
-  // OPTIONAL: Send feedback to backend via fetch here
-  console.log("Feedback submitted:", feedback);
-
-  statusMsg.style.display = 'block';
-  feedbackBox.value = '';
-  submitBtn.disabled = true;
-});
-</script>
-
 
 
 <script>
@@ -217,26 +202,43 @@ submitBtn.addEventListener('click', () => {
 </script>
 
 <footer>
-  <strong> ☕📋🧋 &copy; 2025 Developed by Srikanth Nagalla ✡🤸‍♂️🦖</strong>
+  <strong>
+    🌍 Hits to this website 👣: <span id="hitCount">...</span>
+    ☕📋🧋 &copy; 2025 Developed by Srikanth Nagalla ✡🤸‍♂️🦖
+  </strong>
 </footer>
 
 </div> <!-- page-wrapper -->
 <script>
-// Disable Right-Click + DevTools
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.onkeydown = function(e) {
-  if (
-    e.key === 'F12' || 
-    (e.ctrlKey && e.shiftKey && ['I', 'C', 'J'].includes(e.key)) || 
-    (e.ctrlKey && e.key === 'U')
-  ) {
-    return false;
+   if (!document.cookie.includes('visited=true')) {
+  fetch('/api/hit')
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('hitCount').textContent = data.count;
+      document.cookie = "visited=true; max-age=" + (60 * 60 * 24 * 365) + "; path=/";
+    });
+  } else {
+    // Already visited, just fetch count to display
+    fetch('/api/hit-count')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('hitCount').textContent = data.count;
+      })
+    .catch(err => {
+      console.warn('Could not fetch hit count', err);
+      document.getElementById('hitCount').textContent = 'N/A';
+    });
   }
-};
 </script>
+
 <script src="/js/app.js?v=2" defer></script>
 <script src="/js/slate.js" defer></script>
 <script src="/js/feedback.js" defer></script> <!-- ✅ Add this line -->
+ <img src="/images/flying-cute.gif" alt="plane1" class="flying-plane plane-left-to-right" />
+ <img src="/images/flying-cute.gif" alt="plane2" class="flying-plane plane-right-to-left" />
+
+
+
 
 </body>
 </html>
