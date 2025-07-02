@@ -18,7 +18,7 @@ const projectRoot = path.join(__dirname, '..');
 dotenv.config({ path: path.join(projectRoot, '.env') });
 
 const app = express();
-
+app.set('trust proxy', 1);
 // ✅ Redirect to HTTPS in production
 if (process.env.NODE_ENV === 'production') {
    app.use(helmet());
