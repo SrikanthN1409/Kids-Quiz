@@ -174,7 +174,7 @@ canvas.height = canvas.offsetHeight;
 
     if (correct) {
       if (typeof confetti === 'function') confetti();
-      drawingResult.textContent = `✅ Good job! You wrote "${best}" with ${confidence}% confidence.`;
+      drawingResult.textContent = `✅ Good job! You wrote "${expected}" with ${confidence}% confidence.`;
       drawingResult.style.color = 'green';
       new Audio('/sounds/correct.mp3').play();
 
