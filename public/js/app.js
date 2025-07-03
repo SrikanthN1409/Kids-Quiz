@@ -1,4 +1,3 @@
-// Add this to your app.js, near the top with other event listeners
 document.addEventListener('DOMContentLoaded', () => {
   // Existing celebration function
   function celebrate() {
@@ -11,36 +10,110 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-document.getElementById('resetProgressBtn')?.addEventListener('click', (e) => {
-  e.preventDefault();
-  localStorage.clear();
-  
-  // Use try-catch as fallback
-  try {
-    // Simple confetti that doesn't require workers
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 }
-    });
-  } catch (err) {
-    console.log("Confetti not available, but progress was reset");
+  // Production environment check
+  const isProduction = window.location.hostname !== 'localhost' && 
+                      !window.location.hostname.startsWith('192.168');
+
+  if (isProduction) {
+    console.log('Production environment detected');
+    
+    // Verify localStorage is available
+    try {
+      localStorage.setItem('test', 'test');
+      localStorage.removeItem('test');
+    } catch (e) {
+      console.error('localStorage unavailable in production:', e);
+    }
   }
-  
-  // Reload after short delay
-  setTimeout(() => location.reload(), 800);
-});
-  // celebrate();
-// In your app.js
-document.addEventListener('DOMContentLoaded', () => {
+
+  // Reset Progress Button Handler with complete error handling
+  document.getElementById('resetProgressBtn')?.addEventListener('click', async () => {
+    try {
+      // Show visual feedback immediately
+      const btn = document.getElementById('resetProgressBtn');
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Resetting...';
+
+      // Check storage availability
+      let storageCleared = false;
+      if (typeof localStorage !== 'undefined' && localStorage.clear) {
+        try {
+          localStorage.clear();
+          storageCleared = true;
+          console.log('localStorage cleared successfully');
+        } catch (e) {
+          console.error('localStorage.clear failed:', e);
+        }
+      }
+
+      // Fallback to other storage methods if needed
+      if (!storageCleared) {
+        console.log('Attempting fallback storage clearing');
+        try {
+          // Clear cookies for the domain
+          document.cookie.split(';').forEach(cookie => {
+            const [name] = cookie.split('=');
+            document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+          });
+          
+          // Clear sessionStorage
+          if (typeof sessionStorage !== 'undefined') {
+            sessionStorage.clear();
+          }
+          
+          storageCleared = true;
+          console.log('Fallback storage clearing completed');
+        } catch (e) {
+          console.error('All storage clearing methods failed:', e);
+        }
+      }
+
+      // Try confetti in production
+      try {
+        if (typeof confetti === 'function') {
+          await new Promise(resolve => {
+            confetti({
+              particleCount: 150,
+              spread: 80,
+              origin: { y: 0.6 },
+              onResize: true
+            });
+            setTimeout(resolve, 800);
+          });
+        }
+      } catch (confettiError) {
+        console.log('Confetti not available:', confettiError);
+      }
+
+      // Reload after delay
+      setTimeout(() => {
+        if (!storageCleared) {
+          alert('Progress reset may not have worked completely. Please refresh the page.');
+        }
+        location.reload();
+      }, 1000);
+
+    } catch (error) {
+      console.error('Reset failed:', error);
+      const btn = document.getElementById('resetProgressBtn');
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = '🔄 Reset Progress';
+      }
+      alert('Reset failed. Please try again or refresh the page.');
+    }
+  });
+
+  // Google Analytics initialization
   if (typeof window.dataLayer === 'undefined') {
     window.dataLayer = window.dataLayer || [];
     window.gtag = function(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-CBJX78CZG7');
   }
-});
   
+  // ... rest of your existing app.js code ...
   const tabs = document.querySelectorAll('#tabs li');
   const quizDlg = document.getElementById('quiz');
   const questionEl = document.getElementById('question');
@@ -212,8 +285,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
     factBox.innerHTML = `<li>💡 Fun Fact: ${randomFact}</li><li>💡 Quote: ${randomQuote}</li>`;
   }
-});
 
-window.addEventListener('load', () => {
-  console.log("✅ Page fully loaded");
+  window.addEventListener('load', () => {
+    console.log("✅ Page fully loaded");
+  });
 });

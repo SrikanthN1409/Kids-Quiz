@@ -25,7 +25,7 @@ app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'self'"],
     scriptSrc: [
-      "'self'", 
+      "'self'",
       "https://cdn.jsdelivr.net",
       "https://www.googletagmanager.com",
       "https://unpkg.com",
