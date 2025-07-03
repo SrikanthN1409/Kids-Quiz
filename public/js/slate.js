@@ -198,7 +198,7 @@ canvas.height = canvas.offsetHeight;
     validateDrawing();
   }, 15000);
 } else {
-         drawingResult.textContent = `You wrote "${best}" with ${confidence}% confidence.`;
+         drawingResult.textContent = `You tried "${expected}" But with ${confidence}% confidence.`;
       drawingResult.style.color = 'green';
       new Audio('/sounds/correct.mp3').play();
 
