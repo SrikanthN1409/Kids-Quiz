@@ -11,6 +11,16 @@ import requestIp from 'request-ip';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 
+// ✅ 2. Initialize express app
+const app = express();
+
+// ✅ 3. Configure environment variables
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const projectRoot = path.join(__dirname, '..');
+dotenv.config({ path: path.join(projectRoot, '.env') });
+
+// ✅ 4. Set up CSP with helmet
 app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'self'"],
@@ -47,17 +57,10 @@ app.use(helmet.contentSecurityPolicy({
     objectSrc: ["'none'"]
   }
 }));
-// ✅ Resolve __dirname in ES Module
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const projectRoot = path.join(__dirname, '..');
-dotenv.config({ path: path.join(projectRoot, '.env') });
 
-const app = express();
+// ✅ 5. Add other middleware
 app.set('trust proxy', 1);
-// ✅ Redirect to HTTPS in production
 if (process.env.NODE_ENV === 'production') {
-   app.use(helmet());
   app.use(rateLimit({ windowMs: 60_000, max: 100 }));
   app.use((req, res, next) => {
     if (req.headers['x-forwarded-proto'] !== 'https') {
