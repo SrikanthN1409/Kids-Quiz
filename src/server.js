@@ -11,6 +11,42 @@ import requestIp from 'request-ip';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+    scriptSrc: [
+      "'self'", 
+      "https://cdn.jsdelivr.net",
+      "https://www.googletagmanager.com",
+      "https://unpkg.com",
+      "https://static.cloudflareinsights.com",
+      "'unsafe-eval'",
+      "blob:"
+    ],
+    scriptSrcElem: [
+      "'self'",
+      "https://cdn.jsdelivr.net",
+      "https://www.googletagmanager.com",
+      "https://unpkg.com",
+      "https://static.cloudflareinsights.com",
+      "https://fonts.googleapis.com"
+    ],
+    styleSrc: [
+      "'self'",
+      "'unsafe-inline'",
+      "https://fonts.googleapis.com"
+    ],
+    fontSrc: [
+      "'self'",
+      "https://fonts.gstatic.com"
+    ],
+    workerSrc: ["'self'", "blob:"],
+    imgSrc: ["'self'", "data:", "https:"],
+    connectSrc: ["'self'", "https://www.google-analytics.com"],
+    frameSrc: ["'none'"],
+    objectSrc: ["'none'"]
+  }
+}));
 // ✅ Resolve __dirname in ES Module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

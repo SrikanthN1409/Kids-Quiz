@@ -2,16 +2,24 @@
 <html lang="en">
     
 <head>
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 'self' https://cdn.jsdelivr.net https://www.googletagmanager.com https://unpkg.com https://static.cloudflareinsights.com 'unsafe-eval' blob:;
+  script-src-elem 'self' https://cdn.jsdelivr.net https://www.googletagmanager.com https://unpkg.com https://static.cloudflareinsights.com https://fonts.googleapis.com;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  worker-src 'self' blob:;
+  child-src 'self' blob:;
+  font-src 'self' https://fonts.gstatic.com;
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' data: https:;
+  connect-src 'self' https://www.google-analytics.com;
+  frame-src 'none';
+  object-src 'none';
+">
   <!-- Google tag (gtag.js) -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CBJX78CZG7"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-CBJX78CZG7');
-</script>
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
 <meta name="description" content="Fun and educational quizzes & handwriting practice for kids in English, Hindi, Malayalam, Kannada, Tamil, Oriya, Bengali, Punjabi, Gujarati, Assamese, Maithili, Santali, Urdu and Telugu. Boost learning with interactive games!">
 <meta name="keywords" content="kids quiz, handwriting practice, fun learning, educational games, alphabets, Hindi, Malayalam, Kannada, Tamil, Oriya, Bengali, Punjabi, Gujarati, Assamese, Maithili, Santali, Urdu, Telugu, English for kids">
@@ -32,17 +40,7 @@
 
 <header>
 
-  <script>
-    // 🎉 Confetti Animation
-    function celebrate() {
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
-    }
-    document.addEventListener('DOMContentLoaded', celebrate);
-  </script>
+ 
   <div class="moving-bird">
     <img src="/images/bird.gif" alt="bigbird" class="bird-img" />
   </div>
@@ -84,7 +82,7 @@
 
 <div id="mainControls">
   <button id="startPractice">✍️ Start Practicing</button>
-  <button onclick="localStorage.clear(); location.reload();">🔄 Reset Progress</button>
+ <button id="resetProgressBtn">🔄 Reset Progress</button>
 </div>
 
 </section>
@@ -191,16 +189,7 @@
 <script src="https://unpkg.com/tesseract.js@v4.1.1/dist/tesseract.min.js"></script>
 
 
-<script>
-  const img = document.getElementById('letterImage');
-  if (img) {
-    img.onerror = () => {
-      console.warn("⚠️ Image failed to load");
-      img.alt = "⚠️ Image not found";
-      img.src = "/images/fallback.png"; // ✅ Put a fallback image in this path
-    };
-  }
-</script>
+
 
 <footer>
   <strong>
@@ -210,32 +199,7 @@
 </footer>
 
 </div> <!-- page-wrapper -->
-<script>
-  const hitCountEl = document.getElementById('hitCount');
 
-  if (!document.cookie.includes('visited=true')) {
-    fetch('/api/hit')
-      .then(res => res.json())
-      .then(data => {
-        hitCountEl.textContent = data.count;
-        document.cookie = "visited=true; max-age=" + (60 * 60 * 24 * 365) + "; path=/";
-      })
-      .catch(err => {
-        console.warn('Could not increment hit count', err);
-        hitCountEl.textContent = 'N/A';
-      });
-  } else {
-    fetch('/api/hit-count')
-      .then(res => res.json())
-      .then(data => {
-        hitCountEl.textContent = data.count;
-      })
-      .catch(err => {
-        console.warn('Could not fetch hit count', err);
-        hitCountEl.textContent = 'N/A';
-      });
-  }
-</script>
 
 
 <script src="/js/app.js?v=2" defer></script>

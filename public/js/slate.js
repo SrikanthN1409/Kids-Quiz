@@ -1,6 +1,14 @@
-
-
 document.addEventListener('DOMContentLoaded', () => {
+  // Image error handling (moved from HTML)
+  const img = document.getElementById('letterImage');
+  if (img) {
+    img.onerror = () => {
+      console.warn("⚠️ Image failed to load");
+      img.alt = "⚠️ Image not found";
+      img.src = "/images/fallback.png";
+    };
+  }
+
   const dialog = document.getElementById('slateDialog');
   const canvas = document.getElementById('slateCanvas');
   const ctx = canvas.getContext('2d');
@@ -42,14 +50,13 @@ document.addEventListener('DOMContentLoaded', () => {
     urdu: ['ا','آ','ب','پ','ت','ٹ','ث','ج','چ','ح','خ','د','ذ','ر','ز','ژ','س','ش','ص','ض','ط','ظ','ع','غ','ف','ق','ک','گ','ل','م','ن','و'],
     telugu: ['అ','ఆ','ఇ','ఈ','ఉ','ఊ','ఎ','ఏ','ఐ','ఒ','ఓ','ఔ','అం','అః']
   };
-let tracingActive = false;
-let hasShownTrace = false; // ✅ To track if tracing hint was shown
 
+  let tracingActive = false;
+  let hasShownTrace = false;
   let lang = 'english';
   let letters = [];
   let index = 0;
   let drawing = false;
-
   const progressKey = 'letterProgress';
 
   function loadProgress() {

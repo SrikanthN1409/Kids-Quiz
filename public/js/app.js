@@ -1,4 +1,46 @@
+// Add this to your app.js, near the top with other event listeners
 document.addEventListener('DOMContentLoaded', () => {
+  // Existing celebration function
+  function celebrate() {
+    if (typeof confetti === 'function') {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    }
+  }
+
+document.getElementById('resetProgressBtn')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  localStorage.clear();
+  
+  // Use try-catch as fallback
+  try {
+    // Simple confetti that doesn't require workers
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  } catch (err) {
+    console.log("Confetti not available, but progress was reset");
+  }
+  
+  // Reload after short delay
+  setTimeout(() => location.reload(), 800);
+});
+  // celebrate();
+// In your app.js
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof window.dataLayer === 'undefined') {
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-CBJX78CZG7');
+  }
+});
+  
   const tabs = document.querySelectorAll('#tabs li');
   const quizDlg = document.getElementById('quiz');
   const questionEl = document.getElementById('question');
@@ -136,8 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
       "Cheetahs can't roar, but they can purr!",
       "A group of frogs is called an 'army'!",
       "A group of crows is called a 'murder'."
-
-
     ];
     const quotes = [
       "You can do anything if you try!",
