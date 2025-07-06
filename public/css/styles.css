@@ -73,6 +73,78 @@ main {
   }
 }
 
+#drawCanvas {
+  background: #fff;
+  border-radius: 8px;
+  max-width: 100%;
+  touch-action: none;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  overflow: auto;
+}
+
+.popup.hidden {
+  display: none;
+}
+
+.popup-inner {
+  background: #fefefe;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 95vw;
+  width: 100%;
+  max-height: 95vh;
+  overflow: auto;
+  box-shadow: 0 0 12px rgba(0,0,0,0.25);
+}
+#eraserBtn.active {
+  background-color: #ffcc00;
+  color: black;
+  font-weight: bold;
+}
+.fullscreen-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: white;
+  z-index: 9999;
+  padding: 1rem;
+  overflow: auto;
+  border: none;
+}
+
+.fullscreen-popup::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+#drawCanvas {
+  width: 100%;
+  height: 50vh;
+  background: white;
+  border-radius: 8px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
 /* Add to styles.css */
 #tabs li {
     transition: background-color 0.3s ease, transform 0.2s ease;
@@ -607,6 +679,107 @@ dialog::backdrop {
     right: 100vw;
     opacity: 0;
   }
+}
+.draw-button {
+  font-size: 1.5rem;
+  padding: 12px 30px;
+  border-radius: 50px;
+  border: 2px solid #ffb300;
+  background-color: #ffe082;
+  color: rgb(21, 18, 18);
+  transition: all 0.2s ease;
+}
+
+.draw-button:hover {
+  background-color: #ffd54f; /* slightly darker yellow */
+  transform: scale(1.05);
+  cursor: pointer;
+}
+#animatedAnimals {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* So clicks pass through */
+  z-index: 1;
+}
+
+.animal {
+  position: absolute;
+  width: 80px;
+  height: auto;
+  animation: zigzag 10s linear infinite;
+}
+
+@keyframes zigzag {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(100px, 50px) rotate(10deg);
+  }
+  50% {
+    transform: translate(200px, -50px) rotate(-10deg);
+  }
+  75% {
+    transform: translate(300px, 50px) rotate(10deg);
+  }
+  100% {
+    transform: translate(400px, 0) rotate(0deg);
+  }
+}
+.welcome-page {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(270deg, #ff9a9e, #fad0c4, #fbc2eb, #a1c4fd, #c2e9fb);
+  background-size: 800% 800%;
+  animation: rainbowBG 12s ease infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 0;
+}
+
+@keyframes rainbowBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.welcome-content {
+  text-align: center;
+  color: white;
+  z-index: 1;
+}
+
+.welcome-content h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 6px #000;
+}
+
+.welcome-content p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.welcome-content button {
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  background-color: #ffffffcc;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #333;
+  transition: background-color 0.3s ease;
+}
+
+.welcome-content button:hover {
+  background-color: #fff;
 }
 
 

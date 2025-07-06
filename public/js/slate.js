@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  
   // Image error handling (moved from HTML)
   const img = document.getElementById('letterImage');
   if (img) {

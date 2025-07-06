@@ -23,35 +23,32 @@
   <!-- Google tag (gtag.js) -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CBJX78CZG7"></script>
-
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
 <meta name="description" content="Fun and educational quizzes & handwriting practice for kids in English, Hindi, Malayalam, Kannada, Tamil, Oriya, Bengali, Punjabi, Gujarati, Assamese, Maithili, Santali, Urdu and Telugu. Boost learning with interactive games!">
 <meta name="keywords" content="kids quiz, handwriting practice, fun learning, educational games, alphabets, Hindi, Malayalam, Kannada, Tamil, Oriya, Bengali, Punjabi, Gujarati, Assamese, Maithili, Santali, Urdu, Telugu, English for kids">
 <meta name="author" content="Srikanth Nagalla">
 <link rel="canonical" href="https://www.kids-adda.fun/">
-
-
   <!-- <script src="https://kit.fontawesome.com/yourkit.js" crossorigin="anonymous"></script> -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Kids Quiz</title>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css?v=3">
+  <link rel="manifest" href="/manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js');
+  }
+</script>
 </head>
 <body class="theme">
 <div class="page-wrapper">
-
-
 <header>
-
- 
   <div class="moving-bird">
     <img src="/images/bird.gif" alt="bigbird" class="bird-img" />
   </div>
-
   <h1>🎉 Kids Quiz 🏆</h1>    
   <div class="bird-text">Test your knowledge with fun quizzes!👇</div>
-
   <ul id="tabs">
     <li data-cat="Family Relations">👨‍👩‍👧‍👦Family & Relations👴</li>
     <li data-cat="Cartoon">🧸Cartoon🔮</li>
@@ -61,36 +58,35 @@
     <li data-cat="Mathematics">➗Math🧮</li>
   </ul>
 </header>
-
 <div class="ribbon"></div>
 
 <main>
-  
   <section class="fun-fact">
     <h3>🗣️ Did You Know?</h3>
     <p id="factBox">Loading a fun fact...</p>
   </section>
-
   <!-- ⬇️ Paste here: Second Section -->
   <section class="fun-fact">
     <h3>👨🏻‍🏫 ✍️ My Slate - 🔤 Teaches alphabets with Voice & Visuals.</h3>
-   <li>🌟 Improves handwriting with live drawing and feedback.
-</li>
+   <li>🌟 Improves handwriting with live drawing and feedback.</li>
 <li>🎨 Interactive canvas lets kids draw letters and get instant feedback.
 📊 Progress tracking shows which letters are completed using ✅ and a progress bar.
 </li>
-<li>🎯 Boosts language learning and fine motor skills in a fun and interactive way!</li>
     <!-- <p>Slate helps you to learn Language with audio & image.</p> -->
-    
     <!-- ✅ Paste Step 3 Button Below -->
-
 <div id="mainControls">
   <button id="startPractice">✍️ Start Practicing</button>
  <button id="resetProgressBtn">🔄 Reset Progress</button>
 </div>
-
 </section>
-
+<section class="fun-fact" id="drawing">
+  <h3>🖌️ Draw Your Own Art!</h3>
+  <li>Use the canvas to draw anything you like. Click "download" to save your drawing in your device.</li>
+  <li>🎯 Boosts fine motor skills in a fun and interactive way!</li>
+  <div class="text-center mt-4">
+  <button id="openDrawCanvasBtn" class="btn btn-primary draw-button"> 🎨 Draw </button>
+</div>
+</section>
   <section class="fun-fact" id="feedbackSection">
   <h3>We value your feedback for better improvements!</h3>
   <textarea id="feedbackInput" rows="4" style="width: 100%;" placeholder="Write your feedback here..."></textarea><br><br>
@@ -99,17 +95,12 @@
   <button id="submitFeedback" disabled>Submit</button>
   <p id="feedbackMsg" style="color: green; display: none;">✅ Feedback submitted successfully!</p>
 </section>
-
 </main>
-
-
 <!-- Button to trigger -->
-
-
-
 <!-- Fullscreen Popup -->
 <dialog id="slateDialog" class="fullscreen-popup">
   <div id="languageSelect">
+    <div id="animatedAnimals"></div>
     <h2>Welcome to My Slate!</h2>
     <p>Choose a language to start practicing your handwriting.</p>
     <button class="lang-btn" data-lang="english">English</button>
@@ -122,29 +113,22 @@
     <button class="lang-btn" data-lang="bengali">Bengali</button>
     <button class="lang-btn" data-lang="gujarati">Gujarati</button>
     <button class="lang-btn" data-lang="assamese">Assamese</button> 
-  
-  
     <br><br>
     <button id="closeSlate">❌ Close</button>
   </div>
-
   <div id="slateContent" hidden>
     <div id="progressDisplay" style="margin: 10px 0; font-weight: bold;"></div>
     <h2 id="letterPrompt">Draw the letter: A</h2>
-
     <div id="progressArea">
       <p id="progressStatus">Progress: 0%</p>
       <progress id="progressBar" max="100" value="0"></progress>
     </div>
-
     <img id="letterImage" src="" alt="⚠️ Image failed to load" style="max-height: 150px;" />
-
     <div style="position: relative; display: inline-block;">
       <button id="prevLetterBtn">⬅️ Previous Letter</button>
       <button id="nextLetterBtn">Next Letter ➡️</button>
       <button id="speakLetterBtn">🔊 Speak</button>
       <button id="hintIcon" title="Hint: See sample image for this language">💡</button>
-
       <!-- Hint image container shown on hover -->
       <div id="hintImageContainer" style="
         position: absolute;
@@ -160,62 +144,66 @@
         <img id="referenceImage" src="" alt="Letter Reference" style="height: 250px;">
       </div>
     </div>
-
     <canvas id="slateCanvas" width="350" height="350" style="margin-top: 10px;"></canvas>
-
     <button id="checkDrawing">Validate Alphabet</button>
     <button id="clearDrawing">🧽 Clear</button>
     <button id="closeSlateContent">Close</button>
     <p id="drawingResult" class="feedback-box"></p>
     <audio id="voiceInstruction" preload="auto"></audio>
-
     <h6>Note:
       <p>* Uses OCR (Tesseract.js) to recognize handwriting and provide real-time accuracy feedback.</p>
       <p>* Prototype: Fine-tuning for handwriting is ongoing and will improve in next release.</p>
     </h6>
   </div>
 </dialog>
-
 <!-- Quiz Dialog -->
 <dialog id="quiz">
+  <div id="animatedAnimals"></div>
   <form method="dialog">
     <h2 id="question"></h2>
     <ul id="choices"></ul>
     <button id="quit" type="button">Quit</button>
   </form>
 </dialog>
-
 <dialog id="result">
+  <div id="animatedAnimals"></div>
   <h2>Quiz Complete!</h2>
   <p>Your Score: <span id="score"></span></p>
   <button id="home">Home</button>
 </dialog>
 <script src="https://unpkg.com/tesseract.js@v4.1.1/dist/tesseract.min.js"></script>
-
-
-
-
+<dialog id="drawPopup" class="fullscreen-popup">
+  <div class="popup-inner slate-container">
+    <div id="animatedAnimals"></div>
+    <div class="text-center mb-2">
+      <h3>🎨 Draw Your Own Art</h3>
+    </div>
+    <canvas id="drawCanvas" style="border:2px solid #ccc; touch-action: none;"></canvas>
+    <div class="controls mt-3">
+      <label for="brushSize">Brush Size:</label>
+      <input type="range" id="brushSize" min="1" max="20" value="5" class="mx-2">
+      <input type="color" id="brushColor" value="#000000" class="mx-2">
+      <button id="eraserBtn" class="btn btn-warning">🧽 Eraser</button>
+      <button id="clearDrawBtn" class="btn btn-danger">🗑️ Clear</button>
+      <button id="downloadDrawBtn" class="btn btn-success">📥 Download</button>
+      <button id="closeDrawBtn" class="btn btn-secondary">❌ Close</button>
+    </div>
+  </div>
+</dialog>
 <footer>
   <strong>
     🌍 Hits to this website 👣: <span id="hitCount">...</span>
     ☕📋🧋 &copy; 2025 Developed by Srikanth Nagalla ✡🤸‍♂️🦖
   </strong>
 </footer>
-
 </div> <!-- page-wrapper -->
-
-
-
 <script src="/js/app.js?v=2" defer></script>
+<script src="/js/draw.js"></script>
 <script src="/js/slate.js" defer></script>
 <script src="/js/feedback.js" defer></script> <!-- ✅ Add this line -->
 <script src="/js/hitCounter.js?v=1.0.0"></script>
-
+<script src="/js/animals.js"></script>
  <img src="/images/flying-cute.gif" alt="plane1" class="flying-plane plane-left-to-right" />
  <img src="/images/flying-cute.gif" alt="plane2" class="flying-plane plane-right-to-left" />
-
-
-
-
 </body>
 </html>
