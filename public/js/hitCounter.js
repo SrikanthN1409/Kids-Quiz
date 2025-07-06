@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-  fetch('/api/hit')
+  fetch('/api/hit', {
+    method: 'POST'
+  })
     .then(res => res.json())
     .then(data => {
       const hitElement = document.getElementById('hitCount');

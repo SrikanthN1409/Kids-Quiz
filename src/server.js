@@ -6,7 +6,10 @@ import express from 'express';
 import cors from 'cors';
 import nodemailer from 'nodemailer';
 import quizRouter from './routes/quiz.js';
-import pool from './db.js'; // PostgreSQL connection
+import pool from './db.js'; // or '../db.js' depending on location
+ // ✅ Correct if you're doing `export { pool }`
+ // ✅ Default import (matches your current export)
+// PostgreSQL connection
 import requestIp from 'request-ip';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
@@ -89,14 +92,14 @@ app.use(express.json());
 // ✅ server.js (or route file)
 // ✅ This route only returns count without increment
 // Hit counter (add AFTER defining `app` and `pool`)
-app.get('/api/hit', async (req, res) => {
+app.post('/api/hit', async (req, res) => {
   try {
-    await pool.query('UPDATE site_hits SET count = count + 1 WHERE id = 1');
-    const result = await pool.query('SELECT count FROM site_hits WHERE id = 1');
+    await pool.query('INSERT INTO site_hits DEFAULT VALUES');
+    const result = await pool.query('SELECT COUNT(*) FROM site_hits');
     res.json({ count: result.rows[0].count });
   } catch (err) {
-    console.error('Error incrementing hit count:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Error tracking hit:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
