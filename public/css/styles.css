@@ -122,8 +122,9 @@ main {
   background: white;
   z-index: 9999;
   padding: 1rem;
-  overflow: auto;
   border: none;
+  margin: 0;
+  overflow-y: auto;
 }
 
 .fullscreen-popup::backdrop {
@@ -426,11 +427,13 @@ h1::before {
 }
 
 .fullscreen-popup {
-  width: 100vw;
+   width: 100vw;
   height: 100vh;
-  padding: 1rem;
-  background: #fffbe9;
   border: none;
+  padding: 0;
+  margin: 0;
+  background: #fff;
+  overflow-y: auto;
 }
 
 dialog::backdrop {
@@ -445,17 +448,29 @@ dialog::backdrop {
   display: block;
 }
 #languageSelect {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  padding: 2rem;
+  padding: 20px;
   font-family: 'Comic Sans MS', cursive, sans-serif;
   background-color: #fef9ef;
   border-radius: 10px;
+    max-width: 95%;
+  margin: auto;
 }
 
 #languageSelect h1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   font-size: 2em;
   margin-bottom: 0.5em;
   color: #333;
+  text-align: center;
+  padding: 20px;
+  max-width: 95%;
+  margin: auto;
 }
 
 .hit-stats {
@@ -466,10 +481,18 @@ dialog::backdrop {
 }
 
 .lang-btn {
-  margin: 0.4em;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  border-radius: 8px;
+   display: inline-block;
+   
+  color: #333;
+  font-weight: bold;
+  padding: 10px 15px;
+  margin: 6px;
+  border-radius: 12px;
+  font-size: 1rem;
+  width: 80%;
+  min-width: 110px;
+  max-width: 250px;
+  flex: 1 1 45%;
   background-color: #e8f0fe;
   border: 2px solid #90caf9;
   cursor: pointer;
@@ -614,13 +637,15 @@ dialog::backdrop {
 }
 
 #closeSlate {
-  margin-top: 2rem;
+  margin-top: 20px;
+  padding: 10px 20px;
+   border: none;
+  border-radius: 12px;
+  background-color: #ffdddd;
+  color: #990000;
+  border: 1px solid #990000;
+  font-weight: bold;
   font-size: 1em;
-  padding: 0.5em 1.2em;
-  background-color: #ffcdd2;
-  color: #b71c1c;
-  border: none;
-  border-radius: 8px;
   cursor: pointer;
 }
 .flying-plane {
@@ -847,7 +872,19 @@ dialog {
     animation: bounceIn 0.5s ease;
   }
 }
+@media screen and (min-width: 600px) {
+  #languageSelect {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 
+  .lang-btn {
+    margin: 10px;
+    flex: 1 1 25%;
+    width: auto;
+  }
+}
 
   #quiz {
     font-size: 1rem;
@@ -989,4 +1026,23 @@ html, body {
   background: #f9f9f9;
   width: 100%;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+#languageButtonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: white;
+  border-radius: 30px;
+  padding: 10px;
+  margin: 10px auto;
+  max-width: 90%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+#languageButtonContainer button {
+  flex: 1 1 40%;
+  min-width: 100px;
+  max-width: 120px;
+  margin: 5px;
 }
