@@ -102,7 +102,7 @@ document.getElementById('eraserBtn').onclick = () => {
   };
 }
 
-document.getElementById('openDrawCanvasBtn').addEventListener('click', () => {
+document.getElementById('openDrawCanvasBtn')?.addEventListener('click', () => {
    const drawPopup = document.getElementById('drawPopup');
   drawPopup.showModal(); // ✅ works only with <dialog>
   setupDrawCanvas(); // ✅ resize and prepare canvas with white background
@@ -110,7 +110,7 @@ document.getElementById('openDrawCanvasBtn').addEventListener('click', () => {
   setTimeout(setupDrawCanvas, 50);
 });
 
-document.getElementById('closeDrawBtn').addEventListener('click', () => {
+document.getElementById('closeDrawBtn')?.addEventListener('click', () => {
   document.getElementById('drawPopup').close();
   document.body.style.overflow = '';
 });

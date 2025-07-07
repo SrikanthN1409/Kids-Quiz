@@ -17,7 +17,7 @@ const pool = new Pool({
   },
 });
 
-console.log('✅ Pool created with DB URL:', process.env.DATABASE_URL);
+
 
 // 👉 Use named export here:
 export default pool;
