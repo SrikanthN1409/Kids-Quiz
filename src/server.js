@@ -28,22 +28,24 @@ app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'self'"],
     scriptSrc: [
-      "'self'",
-      "https://cdn.jsdelivr.net",
-      "https://www.googletagmanager.com",
-      "https://unpkg.com",
-      "https://static.cloudflareinsights.com",
-      "'unsafe-eval'",
-      "blob:"
-    ],
-    scriptSrcElem: [
-      "'self'",
-      "https://cdn.jsdelivr.net",
-      "https://www.googletagmanager.com",
-      "https://unpkg.com",
-      "https://static.cloudflareinsights.com",
-      "https://fonts.googleapis.com"
-    ],
+  "'self'",
+  "https://cdn.jsdelivr.net",
+  "https://www.googletagmanager.com",
+  "https://unpkg.com",
+  "https://static.cloudflareinsights.com",
+  "'unsafe-eval'",
+  "blob:",
+  "https://www.kids-adda.fun"
+],
+scriptSrcElem: [
+  "'self'",
+  "https://cdn.jsdelivr.net",
+  "https://www.googletagmanager.com",
+  "https://unpkg.com",
+  "https://static.cloudflareinsights.com",
+  "https://fonts.googleapis.com",
+  "https://www.kids-adda.fun"
+],
     styleSrc: [
       "'self'",
       "'unsafe-inline'",
