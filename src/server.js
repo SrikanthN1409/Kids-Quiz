@@ -95,6 +95,7 @@ app.use(express.json());
 // ✅ This route only returns count without increment
 // Hit counter (add AFTER defining `app` and `pool`)
 app.post('/api/hit', async (req, res) => {
+  console.log('👉 HIT /api/hit', process.env.DATABASE_URL); 
   try {
     await pool.query('INSERT INTO site_hits DEFAULT VALUES');
     const result = await pool.query('SELECT COUNT(*) FROM site_hits');
