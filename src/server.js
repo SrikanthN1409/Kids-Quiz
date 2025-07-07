@@ -6,7 +6,10 @@ import express from 'express';
 import cors from 'cors';
 import nodemailer from 'nodemailer';
 import quizRouter from './routes/quiz.js';
-import pool from './db.js'; // or '../db.js' depending on location
+import pool from './db.js'; // ✅ Correct path to default export
+
+
+// import pool from './db.js'; // or '../db.js' depending on location
  // ✅ Correct if you're doing `export { pool }`
  // ✅ Default import (matches your current export)
 // PostgreSQL connection
