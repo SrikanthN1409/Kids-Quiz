@@ -956,3 +956,37 @@ html, body {
   50% { background-color: #ffeaa7; }
   100% { background-color: white; }
 }
+
+/* === Fullscreen Slate Popup Fix for Android === */
+#slatePopup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
+
+#drawingCanvas {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  touch-action: none; /* Allow drawing on mobile */
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  gap: 1rem;
+  background: #f9f9f9;
+  width: 100%;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}

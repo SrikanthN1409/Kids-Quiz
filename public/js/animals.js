@@ -19,9 +19,9 @@ function spawnAnimal(src) {
 // Cycle animals every few seconds
 setInterval(() => {
   const animals = [
-    '/assets/animals/bunny.gif',
-    '/assets/animals/bear.gif',
-    '/assets/animals/cat.gif',
+    // '/assets/animals/bunny.gif',
+    // '/assets/animals/bear.gif',
+    // '/assets/animals/cat.gif',
     '/assets/animals/dog.gif',
     '/assets/animals/rhino.gif',
     '/assets/animals/pawsum.gif'

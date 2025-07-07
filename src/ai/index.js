@@ -1,8 +1,7 @@
 import 'dotenv/config.js';
 import OpenAI from 'openai';
 import nodemailer from 'nodemailer';
- import pool from '../db.js';
-// import { pool } from './db.js'; // or '../db.js' depending on location
+import pool from '../db.js';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -11,12 +10,14 @@ async function runReview() {
   console.log('Fetched categories:', categories);
 
   let report = '';
-  let totalInserted = 0; // 👈 Track total new inserts
+  let totalInserted = 0;
 
   for (const { id, name } of categories) {
     console.log(`\n🧠 Generating questions for: ${name}`);
 
-    // ✅ 1. Generate 5 new questions
+    // ✅ DELETE old questions for this category
+    await pool.query('DELETE FROM questions WHERE category_id = $1', [id]);
+
     let generated = [];
     try {
       const gen = await openai.chat.completions.create({
@@ -27,7 +28,7 @@ async function runReview() {
           {
             role: 'user',
             content:
-              `Generate exactly 5 kid-friendly multiple-choice questions about ${name}. ` +
+              `Generate exactly 30 kid-friendly multiple-choice questions about ${name}. ` +
               `Return only a JSON array. Format:\n` +
               `[{"body": "...", "a": "...", "b": "...", "c": "...", "d": "...", "correct": "A"}]`
           }
@@ -45,39 +46,10 @@ async function runReview() {
 
     console.log(`✅ Parsed ${generated.length} questions for ${name}`);
 
-    // ✅ 2. Check & fix wrong answers in DB
-    const { rows: qs } = await pool.query(
-      'SELECT id, body, correct FROM questions WHERE category_id = $1',
-      [id]
-    );
-
+    // Declare corrections to prevent reference error later
     let corrections = [];
-    try {
-      const fix = await openai.chat.completions.create({
-        model: 'gpt-4o-mini',
-        response_format: { type: 'json_object' },
-        messages: [
-          { role: 'system', content: 'You are a proofreader for multiple choice quizzes.' },
-          {
-            role: 'user',
-            content:
-              `Given these questions with IDs and correct answers:\n${JSON.stringify(qs)}\n` +
-              `Return only incorrect ones in this format:\n[{"id": 1, "correct": "C"}]`
-          }
-        ]
-      });
 
-      const parsed = JSON.parse(fix.choices[0].message.content.trim());
-      corrections = Array.isArray(parsed) ? parsed : [];
-    } catch (err) {
-      console.warn(`⚠️ Could not parse corrections for ${name}`);
-    }
-
-    for (const { id: qid, correct } of corrections) {
-      await pool.query('UPDATE questions SET correct = $1 WHERE id = $2', [correct, qid]);
-    }
-
-    // ✅ 3. Insert new questions + track inserted count
+    // ✅ Insert new questions
     let inserted = 0;
     for (const q of generated) {
       const result = await pool.query(
@@ -107,7 +79,6 @@ async function runReview() {
   console.log('\n✅ Review completed & email sent.');
 }
 
-
 async function sendMail(text) {
   const mailer = nodemailer.createTransport({
     host: 'smtp.mail.yahoo.com',
@@ -136,7 +107,3 @@ runReview()
     pool.end();
     process.exit(0);
   });
-
-
-
-
