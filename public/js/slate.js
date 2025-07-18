@@ -364,6 +364,10 @@ clearBtn.onclick = () => {
   langButtons.forEach(btn => {
     btn.onclick = () => {
       lang = btn.dataset.lang;
+      const slateSection = document.getElementById('slateSection');
+    if (slateSection) {
+      slateSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
       letters = alphabetSets[lang];
       index = 0;
       languageScreen.hidden = true;

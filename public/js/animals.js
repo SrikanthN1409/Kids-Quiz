@@ -4,8 +4,8 @@ function spawnAnimal(src) {
   animal.classList.add('animal');
 
   // Start at a random vertical position
-  const top = Math.random() * (window.innerHeight - 100);
-  animal.style.top = `${top}px`;
+  const top = Math.random() * (window.innerHeight - 900);
+  animal.style.top = `${screenTop}px`;
 
   // Random delay to stagger animations
   animal.style.animationDelay = `${Math.random() * 5}s`;
@@ -13,7 +13,7 @@ function spawnAnimal(src) {
   document.getElementById('animatedAnimals').appendChild(animal);
 
   // Remove after animation ends
-  setTimeout(() => animal.remove(), 12000);
+  setTimeout(() => animal.remove(), 20000);
 }
 
 // Cycle animals every few seconds
@@ -22,9 +22,10 @@ setInterval(() => {
     // '/assets/animals/bunny.gif',
     // '/assets/animals/bear.gif',
     // '/assets/animals/cat.gif',
-    '/assets/animals/dog.gif',
-    '/assets/animals/rhino.gif',
-    '/assets/animals/pawsum.gif'
+    // '/assets/animals/dog.gif',
+    '/assets/animals/rhino.gif'
+    // '/assets/animals/onlybubbles.gif'
+    //  '/assets/animals/pawsum.gif'
   ];
   const randomAnimal = animals[Math.floor(Math.random() * animals.length)];
   spawnAnimal(randomAnimal);

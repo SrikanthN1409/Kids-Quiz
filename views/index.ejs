@@ -44,7 +44,9 @@
 <body class="theme">
 <div class="page-wrapper">
 <header>
+  
   <div class="moving-bird">
+     <div id="animatedAnimals"></div>
     <img src="/images/bird.gif" alt="bigbird" class="bird-img" />
   </div>
   <h1>🎉 Kids Quiz 🏆</h1>    
@@ -99,10 +101,10 @@
 <!-- Button to trigger -->
 <!-- Fullscreen Popup -->
 <dialog id="slateDialog" class="fullscreen-popup">
-  <div id="languageSelect">
-    <div id="animatedAnimals"></div>
+  <div id="languageSelect" class="slate-container">
+   
     <h2>Welcome to My Slate!</h2>
-    <h1>Choose a language to start practicing your handwriting.</h1>
+    <h4>Choose a language to start practicing your handwriting.</h4>
      <div class="language-buttons">
     <div>
     <button class="lang-btn" data-lang="english">English</button>
@@ -117,7 +119,7 @@
     <button class="lang-btn" data-lang="assamese">Assamese</button> 
     <br><br></div>
     <button id="closeSlate">❌ Close</button>
-  </div>
+  </div><br>
   <div id="slateContent" hidden>
     <div id="progressDisplay" style="margin: 10px 0; font-weight: bold;"></div>
     <h2 id="letterPrompt">Draw the letter: A</h2>
@@ -147,6 +149,7 @@
       </div>
     </div>
     <canvas id="slateCanvas" width="350" height="350" style="margin-top: 10px;"></canvas>
+    <br>
     <button id="checkDrawing">Validate Alphabet</button>
     <button id="clearDrawing">🧽 Clear</button>
     <button id="closeSlateContent">Close</button>
@@ -160,7 +163,7 @@
 </dialog>
 <!-- Quiz Dialog -->
 <dialog id="quiz">
-  <div id="animatedAnimals"></div>
+ 
   <form method="dialog">
     <h2 id="question"></h2>
     <ul id="choices"></ul>
@@ -168,7 +171,6 @@
   </form>
 </dialog>
 <dialog id="result">
-  <div id="animatedAnimals"></div>
   <h2>Quiz Complete!</h2>
   <p>Your Score: <span id="score"></span></p>
   <button id="home">Home</button>
@@ -176,7 +178,6 @@
 <script src="https://unpkg.com/tesseract.js@v4.1.1/dist/tesseract.min.js"></script>
 <dialog id="drawPopup" class="fullscreen-popup">
   <div class="popup-inner slate-container">
-    <div id="animatedAnimals"></div>
     <div class="text-center mb-2">
       <h3>🎨 Draw Your Own Art</h3>
     </div>

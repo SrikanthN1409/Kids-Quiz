@@ -114,17 +114,18 @@ main {
   font-weight: bold;
 }
 .fullscreen-popup {
-  position: fixed !important;
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100vw !important;
-  height: 100vh !important;
+  width: 100vw;
+  height: 100vh;
   background: white;
   z-index: 9999;
-  padding: 1rem;
+  padding: 20px;
   border: none;
   margin: 0;
-  overflow-y: auto;
+  overflow: auto;
+  box-sizing: border-box;
 }
 
 .fullscreen-popup::backdrop {
@@ -456,8 +457,8 @@ dialog::backdrop {
   font-family: 'Comic Sans MS', cursive, sans-serif;
   background-color: #fef9ef;
   border-radius: 10px;
-    max-width: 95%;
-  margin: auto;
+   max-width: 90%;
+  margin: 0 auto;
 }
 
 #languageSelect h1 {
@@ -1045,4 +1046,11 @@ html, body {
   min-width: 100px;
   max-width: 120px;
   margin: 5px;
+} 
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
