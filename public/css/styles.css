@@ -732,10 +732,12 @@ dialog::backdrop {
 }
 
 .animal {
+    pointer-events: none;
+  user-select: none;
   position: absolute;
   width: 80px;
   height: auto;
-  animation: zigzag 10s linear infinite;
+  animation: zigzag 20s linear infinite;
 }
 
 @keyframes zigzag {

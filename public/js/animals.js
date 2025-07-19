@@ -1,32 +1,55 @@
+let animalRunning = false;
+let animalIndex = 0;
+
+const animals = [
+   '/assets/animals/bunny.gif',
+  '/assets/animals/cat.gif',
+  
+  '/assets/animals/rhino.gif',
+   '/assets/animals/onlybubbles.gif',
+ 
+  '/assets/animals/bird.gif'
+];
+
 function spawnAnimal(src) {
+  if (animalRunning) return;
+  animalRunning = true;
+
   const animal = document.createElement('img');
   animal.src = src;
   animal.classList.add('animal');
 
   // Start at a random vertical position
-  const top = Math.random() * (window.innerHeight - 900);
-  animal.style.top = `${screenTop}px`;
-
-  // Random delay to stagger animations
-  animal.style.animationDelay = `${Math.random() * 5}s`;
+  const top = Math.random() * (window.innerHeight - 700);
+  animal.style.position = 'fixed';
+  animal.style.top = `${top}px`; // ✅ FIXED: was screenTop (undefined)
+  animal.style.left = '-100px';
+  animal.style.width = '100px';
+  animal.style.zIndex = '9999';
+  animal.style.transition = 'left 20s linear';
 
   document.getElementById('animatedAnimals').appendChild(animal);
 
-  // Remove after animation ends
-  setTimeout(() => animal.remove(), 20000);
+  // Start animation
+  setTimeout(() => {
+    animal.style.left = '100vw';
+  }, 100); // small delay to trigger transition
+
+  // Clean up after animation
+  setTimeout(() => {
+    animal.remove();
+    animalRunning = false;
+    cycleNextAnimal(); // start next one
+  }, 15000); // match transition duration
 }
 
-// Cycle animals every few seconds
-setInterval(() => {
-  const animals = [
-    // '/assets/animals/bunny.gif',
-    // '/assets/animals/bear.gif',
-    // '/assets/animals/cat.gif',
-    // '/assets/animals/dog.gif',
-    '/assets/animals/rhino.gif'
-    // '/assets/animals/onlybubbles.gif'
-    //  '/assets/animals/pawsum.gif'
-  ];
-  const randomAnimal = animals[Math.floor(Math.random() * animals.length)];
-  spawnAnimal(randomAnimal);
-}, 3000); // every 3 seconds
+function cycleNextAnimal() {
+  const currentAnimal = animals[animalIndex];
+  animalIndex = (animalIndex + 1) % animals.length;
+  spawnAnimal(currentAnimal); // ✅ FIXED: was using randomAnimal
+}
+
+// Start animation cycle after page load
+window.addEventListener('load', () => {
+  cycleNextAnimal();
+});
