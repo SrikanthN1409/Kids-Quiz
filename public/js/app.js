@@ -289,4 +289,46 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('load', () => {
     console.log("✅ Page fully loaded");
   });
+    // Open/Close Sudoku Dialog
+  document.getElementById('openSudokuPopupBtn')?.addEventListener('click', () => {
+    document.getElementById('sudokuDialog').showModal();
+  });
+  function closeSudokuDialog() {
+    document.getElementById('sudokuDialog').close();
+  }
+
+  // Open/Close Flip Cards Dialog
+  document.getElementById('openFlipCardsPopupBtn')?.addEventListener('click', () => {
+    document.getElementById('flipCardsDialog').showModal();
+  });
+  function closeFlipCardsDialog() {
+    document.getElementById('flipCardsDialog').close();
+  }
+
+  // Placeholder game logic functions
+  function startSudoku(level) {
+    const board = document.getElementById('sudokuGameBoard');
+    board.innerHTML = `<p>Sudoku game starting at <strong>${level}</strong> level...</p>`;
+  }
+
+  function startFlipCards(level) {
+    const board = document.getElementById('flipCardsGameBoard');
+    board.innerHTML = `<p>Flip Cards game starting at <strong>${level}</strong> level...</p>`;
+  }
+
+});
+sudokuOpenBtn?.addEventListener('click', () => {
+  sudokuPopup.style.display = 'block';
+});
+
+sudokuCloseBtn?.addEventListener('click', () => {
+  sudokuPopup.style.display = 'none';
+});
+
+flipOpenBtn?.addEventListener('click', () => {
+  flipPopup.style.display = 'block';
+});
+
+flipCloseBtn?.addEventListener('click', () => {
+  flipPopup.style.display = 'none';
 });

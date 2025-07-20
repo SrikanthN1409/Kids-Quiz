@@ -20,6 +20,7 @@
   frame-src 'none';
   object-src 'none';
 ">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Google tag (gtag.js) -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CBJX78CZG7"></script>
@@ -81,6 +82,111 @@
  <button id="resetProgressBtn">🔄 Reset Progress</button>
 </div>
 </section>
+<section class="fun-fact" id="brain-games"> 
+  <h3>🧠 Brain Power Games</h3>
+  <li>Improve concentration and logic with simple, fun games for kids!</li>
+  <li>Play Sudoku or match memory cards – all within your browser.</li>
+  <div id="mainControls">
+     <button id="openSudokuBtn" class="btn btn-warning m-2">🧩 Play Sudoku</button>
+    <button id="openFlipCardBtn" class="btn btn-info m-2">🃏 Play Flip Cards</button>
+  </div>
+  <!-- ✅ Sudoku Popup -->
+   <div id="successMessage" class="popup-message" style="
+  display: none;
+  background: #fff;
+  color: green;
+  border: 2px solid green;
+  padding: 12px 18px;
+  margin: 10px auto;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 18px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  text-align: center;
+  max-width: 400px;
+  z-index: 9999;
+  position: relative;
+">
+  🎉 Great job! Puzzle solved!
+</div>
+
+  <div id="sudokuPopup" class="popup-dialog" style="display: none;">
+    <h2>Sudoku Game</h2>
+    <div id="sudokuTimer" class="mb-2 text-primary fw-bold"></div>
+    <div id="sudokuDifficultyBtns" class="d-flex justify-content-center mb-3 gap-2">
+      <label>Select Difficulty:</label>
+      <button class="btn btn-sm btn-outline-primary sudoku-level" data-level="easy">Easy</button>
+      <button class="btn btn-sm btn-outline-primary sudoku-level" data-level="medium">Medium</button>
+      <button class="btn btn-sm btn-outline-primary sudoku-level" data-level="hard">Hard</button>
+      <div class="d-flex justify-content-center my-2">
+  <button class="btn btn-warning" id="resetSudokuBtn">🔁 Reset Puzzle</button>
+</div>
+    </div>
+    <div id="successMessage" style="display: none; text-align: center; margin-bottom: 1rem;">
+  <img src="/images/check.png" alt="Success" style="width: 60px;" />
+  <p style="color: green; font-weight: bold;">🎉 Sudoku Solved Successfully!</p>
+</div>
+    <div id="sudokuGameContainer" class="game-area mt-3" style="margin-top: 15px;"></div>
+    <button id="closeSudokuPopupBtn" class="btn btn-danger mt-3">❌ Close</button>
+  </div>
+
+ <!-- ✅ Flip Cards Popup -->
+<div id="flipCardPopup" class="popup-dialog" style="display: none;">
+  <h2>Flip Cards Game</h2>
+<div id="flipTimer" style="font-weight: bold; font-size: 1.2rem; color: #333; text-align: center; margin-bottom: 10px;">
+  ⏱️ Time: 0 seconds
+</div>
+  <!-- ✅ Success Message at the top -->
+ <div id="flipSuccessMessage"
+     style="display: none; 
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border: 2px solid #28a745;
+            border-radius: 10px;
+            padding: 2rem;
+            z-index: 9999;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            text-align: center;">
+    <img src="/images/check.png" alt="Success" style="width: 80px;" />
+    <p style="color: green; font-size: 1.2rem;">Great job! You matched all pairs!</p>
+  </div>
+
+  <div class="flip-layout">
+    <div class="flip-cards-container">
+   
+      <div class="flip-card">🍇</div>
+      <div class="flip-card">🍌</div>  
+      <div class="flip-card">🍉</div>
+      <div class="flip-card">🍍</div>
+      <div class="flip-card">🥝</div>
+      <div class="flip-card">🍒</div>
+   
+    </div>
+
+    <label>Select Difficulty:</label>
+    <button class="btn btn-sm btn-outline-success flip-level" data-level="easy">Easy</button>
+    <button class="btn btn-sm btn-outline-success flip-level" data-level="medium">Medium</button>
+    <button class="btn btn-sm btn-outline-success flip-level" data-level="hard">Hard</button>
+  </div>
+
+  <div id="flipCardsGameContainer" class="game-area mt-3"></div>
+
+  <div class="instructions">
+    <h3>How to Play:</h3>
+    <ul>
+      <li>Click on a card to flip it.</li>
+      <li>Find and match all the pairs of emojis.</li>
+      <li>Try to complete the game in the shortest time possible.</li>
+      <li>Select difficulty to adjust the number of cards.</li>
+    </ul>
+  </div>
+
+  <button id="closeFlipCardsPopupBtn" class="btn btn-danger mt-3">❌ Close</button>
+</div>
+
 <section class="fun-fact" id="drawing">
   <h3>🖌️ Draw Your Own Art!</h3>
   <li>Use the canvas to draw anything you like. Click "download" to save your drawing in your device.</li>
@@ -101,8 +207,7 @@
 <!-- Button to trigger -->
 <!-- Fullscreen Popup -->
 <dialog id="slateDialog" class="fullscreen-popup">
-  <div id="languageSelect" class="slate-container">
-   
+  <div id="languageSelect" class="slate-container">   
     <h2>Welcome to My Slate!</h2>
     <h4>Choose a language to start practicing your handwriting.</h4>
      <div class="language-buttons">
@@ -128,7 +233,7 @@
       <progress id="progressBar" max="100" value="0"></progress>
     </div>
     <img id="letterImage" src="" alt="⚠️ Image failed to load" style="max-height: 150px;" />
-    <div style="position: relative; display: inline-block;">
+   <div id="flipCardPopup" class="popup-dialog" style="display: none; position: relative;">
       <button id="prevLetterBtn">⬅️ Previous Letter</button>
       <button id="nextLetterBtn">Next Letter ➡️</button>
       <button id="speakLetterBtn">🔊 Speak</button>
@@ -162,7 +267,6 @@
 </dialog>
 <!-- Quiz Dialog -->
 <dialog id="quiz">
- 
   <form method="dialog">
     <h2 id="question"></h2>
     <ul id="choices"></ul>
@@ -192,6 +296,8 @@
     </div>
   </div>
 </dialog>
+
+
 <footer>
   <strong>
     🌍 Hits to this website 👣: <span id="hitCount">...</span>
@@ -205,8 +311,11 @@
 <script src="/js/feedback.js" defer></script> 
 <script src="/js/hitCounter.js" defer></script>
 <script src="/js/animals.js"></script>
-<script src="/js/security.js"></script>
+<!-- <script src="/js/security.js"></script> -->
  <img src="/images/flying-cute.gif" alt="plane1" class="flying-plane plane-left-to-right" />
  <img src="/images/flying-cute.gif" alt="plane2" class="flying-plane plane-right-to-left" />
+<script src="/js/games-popup.js"></script>
+ <script src="/js/sudoku-generator.js"></script>
+
 </body>
 </html>
