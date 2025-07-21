@@ -38,7 +38,8 @@ app.use(helmet.contentSecurityPolicy({
   "https://static.cloudflareinsights.com",
   "blob:",
   "https://www.kids-adda.fun",
-   "https://static.elfsight.com" 
+   "https://cdn.jsdelivr.net"
+
 ],
 scriptSrcElem: [
   "'self'",
@@ -48,8 +49,8 @@ scriptSrcElem: [
   "https://static.cloudflareinsights.com",
   "https://fonts.googleapis.com",
   "https://www.kids-adda.fun",
-  "https://static.elfsight.com",
-  "https://apps.elfsight.com" 
+ "self https://cdn.jsdelivr.net"
+
 ],
     styleSrc: [
       "'self'",
@@ -64,11 +65,10 @@ scriptSrcElem: [
     imgSrc: ["'self'", "data:", "https:"],
     connectSrc: ["'self'",
       "https://www.google-analytics.com",
-      "https://apps.elfsight.com",
-    "https://core.service.elfsight.com",
-   "https://static.elfsight.com"], 
-    frameSrc: [ "'self'",
-      "https://apps.elfsight.com"],
+      "https://*.intercom.io"
+    ],
+    frameSrc: [ "'self'"
+    ],
     objectSrc: ["'none'"]
   }
 }));

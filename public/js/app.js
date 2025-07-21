@@ -9,6 +9,17 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   }
+function showConfetti() {
+  if (typeof confetti === 'function') {
+    confetti({
+      particleCount: 150,
+      spread: 100,
+      origin: { y: 0.6 }
+    });
+  } else {
+    console.warn('Confetti function not found.');
+  }
+}
 
   // Production environment check
   const isProduction = window.location.hostname !== 'localhost' && 
@@ -34,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const originalText = btn.textContent;
       btn.disabled = true;
       btn.textContent = 'Resetting...';
-
+       showConfetti(); 
       // Check storage availability
       let storageCleared = false;
       if (typeof localStorage !== 'undefined' && localStorage.clear) {
@@ -168,45 +179,53 @@ document.addEventListener('DOMContentLoaded', () => {
     ['a', 'b', 'c', 'd'].forEach(letter => {
       const li = document.createElement('li');
       li.textContent = q['choice_' + letter];
+li.onclick = () => {
+  if (choicesEl.classList.contains('disabled')) return; // Prevent double-click
+  choicesEl.classList.add('disabled');
 
-      li.onclick = () => {
-        const correctLetter = q.correct.toLowerCase();
-        const isCorrect = letter.toLowerCase() === correctLetter;
+  const correctLetter = q.correct.toLowerCase();
+  const isCorrect = letter.toLowerCase() === correctLetter;
 
-        playSound(isCorrect ? '/sounds/correct.mp3' : '/sounds/wrong.mp3');
+  playSound(isCorrect ? '/sounds/correct.mp3' : '/sounds/wrong.mp3');
 
-        Array.from(choicesEl.children).forEach((option, i) => {
-          const optLetter = ['a', 'b', 'c', 'd'][i];
-          option.style.pointerEvents = 'none';
-          if (optLetter === correctLetter) {
-            option.innerHTML += ' ✅';
-            option.style.backgroundColor = '#d4fcd4';
-          } else if (option === li) {
-            option.innerHTML += ' ❌';
-            option.style.backgroundColor = '#ffd4d4';
-          }
-        });
+  Array.from(choicesEl.children).forEach((option, i) => {
+    const optLetter = ['a', 'b', 'c', 'd'][i];
+    option.style.pointerEvents = 'none';
 
-        if (isCorrect) {
-          score++;
-          confetti({ particleCount: 120, spread: 70, origin: { y: 0.5 } });
-          document.body.classList.add('popup-celebrate');
-          setTimeout(() => document.body.classList.remove('popup-celebrate'), 800);
-        }
+    if (optLetter === correctLetter) {
+      option.innerHTML += ' ✅';
+      option.style.backgroundColor = '#d4fcd4';
+    }
 
-        setTimeout(() => {
-          idx++;
-          if (idx >= questions.length) {
-            quizDlg.close();
-            playSound('/sounds/success.mp3');
-            resultDlg.showModal();
-            scoreEl.textContent = `${score}/${questions.length}`;
-          } else {
-            showQuestion();
-          }
-        }, 1000);
-      };
+    if (option === li && !isCorrect) {
+      option.innerHTML += ' ❌';
+      option.style.backgroundColor = '#ffd4d4';
+    }
+  });
 
+  if (isCorrect) {
+    score++;
+    if (typeof confetti === 'function') {
+      confetti({ particleCount: 120, spread: 70, origin: { y: 0.5 } });
+    }
+    document.body.classList.add('popup-celebrate');
+    setTimeout(() => document.body.classList.remove('popup-celebrate'), 800);
+  }
+
+  // ✅ Always go to next question after 1s
+  setTimeout(() => {
+    idx++;
+    choicesEl.classList.remove('disabled');
+    if (idx >= questions.length) {
+      quizDlg.close();
+      playSound('/sounds/success.mp3');
+      resultDlg.showModal();
+      scoreEl.textContent = `${score}/${questions.length}`;
+    } else {
+      showQuestion();
+    }
+  }, 1000);
+};
       choicesEl.appendChild(li);
     });
   }
