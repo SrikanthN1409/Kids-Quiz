@@ -8,7 +8,17 @@ let sudokuSeconds = 0;
 let flipTimerInterval;
 let flipSeconds = 0;
 const flipTimer = document.getElementById('flipTimer'); // You’ll need to add this element in HTML
-
+function showConfetti() {
+  if (typeof confetti === 'function') {
+    confetti({
+      particleCount: 150,
+      spread: 100,
+      origin: { y: 0.6 }
+    });
+  } else {
+    console.warn('Confetti function not found.');
+  }
+}
   // === DOM References ===
   const sudokuOpenBtn = document.getElementById('openSudokuBtn');
   const sudokuPopup = document.getElementById('sudokuPopup');
@@ -46,6 +56,7 @@ const flipTimer = document.getElementById('flipTimer'); // You’ll need to add 
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
       generateSudoku(currentSudokuLevel);
+      showConfetti(); 
     });
   }
 

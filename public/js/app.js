@@ -307,10 +307,12 @@ li.onclick = () => {
 
   window.addEventListener('load', () => {
     console.log("✅ Page fully loaded");
+    showConfetti(); 
   });
     // Open/Close Sudoku Dialog
   document.getElementById('openSudokuPopupBtn')?.addEventListener('click', () => {
     document.getElementById('sudokuDialog').showModal();
+     showConfetti(); 
   });
   function closeSudokuDialog() {
     document.getElementById('sudokuDialog').close();
@@ -319,6 +321,7 @@ li.onclick = () => {
   // Open/Close Flip Cards Dialog
   document.getElementById('openFlipCardsPopupBtn')?.addEventListener('click', () => {
     document.getElementById('flipCardsDialog').showModal();
+     showConfetti(); 
   });
   function closeFlipCardsDialog() {
     document.getElementById('flipCardsDialog').close();
@@ -335,7 +338,14 @@ li.onclick = () => {
     board.innerHTML = `<p>Flip Cards game starting at <strong>${level}</strong> level...</p>`;
   }
 
-});
+  const sudokuOpenBtn = document.getElementById('sudokuOpenBtn');
+const sudokuCloseBtn = document.getElementById('sudokuCloseBtn');
+const sudokuPopup = document.getElementById('sudokuPopup');
+
+const flipOpenBtn = document.getElementById('flipOpenBtn');
+const flipCloseBtn = document.getElementById('flipCloseBtn');
+const flipPopup = document.getElementById('flipPopup');
+
 sudokuOpenBtn?.addEventListener('click', () => {
   sudokuPopup.style.display = 'block';
 });
@@ -351,3 +361,5 @@ flipOpenBtn?.addEventListener('click', () => {
 flipCloseBtn?.addEventListener('click', () => {
   flipPopup.style.display = 'none';
 });
+});
+

@@ -86,7 +86,17 @@
         
         TODO: Implement puzzle uniqueness
         */
-        
+        function showConfetti() {
+  if (typeof confetti === 'function') {
+    confetti({
+      particleCount: 150,
+      spread: 100,
+      origin: { y: 0.6 }
+    });
+  } else {
+    console.warn('Confetti function not found.');
+  }
+}
         // If `difficulty` is a string or undefined, convert it to a number or
         // default it to "easy" if undefined.
         if(typeof difficulty === "string" || typeof difficulty === "undefined"){
@@ -188,6 +198,7 @@
         var report = sudoku.validate_board(board);
         if(report !== true){
             throw report;
+             showConfetti();
         }
         
         // Check number of givens is at least MIN_GIVENS
