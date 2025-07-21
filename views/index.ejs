@@ -7,22 +7,20 @@
         integrity="sha384-6LUCQV3N8QZ8ZlQoJq0vQOWZtkWJ9OqPzQ6J8Z6Z6f6U5Q6V5U6f6P0Y6Z6Z6Z6"
         defer></script>
 <meta http-equiv="Content-Security-Policy" content="
-  default-src 'self';
-  script-src 'self' https://cdn.jsdelivr.net https://www.googletagmanager.com https://unpkg.com https://static.cloudflareinsights.com 'unsafe-eval' blob:;
-  script-src-elem 'self' https://cdn.jsdelivr.net https://www.googletagmanager.com https://unpkg.com https://static.cloudflareinsights.com https://fonts.googleapis.com; 
-  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-  worker-src 'self' blob:;
-  child-src 'self' blob:;
-  font-src 'self' https://fonts.gstatic.com;
-  style-src 'self' 'unsafe-inline';
-  img-src 'self' data: https:;
-  connect-src 'self' https://www.google-analytics.com;
-  frame-src 'none';
-  object-src 'none';
+default-src 'self';
+script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://cdn.jsdelivr.net https://static.elfsight.com https://www.googletagmanager.com https://unpkg.com https://static.cloudflareinsights.com;
+style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+img-src 'self' data: https:;
+font-src 'self' https://fonts.gstatic.com;
+connect-src 'self' https://www.google-analytics.com;
+worker-src 'self' blob:;
+frame-src 'self' https://apps.elfsight.com https://*.elfsight.com;
+child-src 'self' blob: https://apps.elfsight.com https://*.elfsight.com;
+object-src 'none';
 ">
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Google tag (gtag.js) -->
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CBJX78CZG7"></script>
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
 <meta name="description" content="Fun and educational quizzes & handwriting practice for kids in English, Hindi, Malayalam, Kannada, Tamil, Oriya, Bengali, Punjabi, Gujarati, Assamese, Maithili, Santali, Urdu and Telugu. Boost learning with interactive games!">
@@ -89,7 +87,7 @@
   <div id="mainControls">
      <button id="openSudokuBtn" class="btn btn-warning m-2">🧩 Play Sudoku</button>
     <button id="openFlipCardBtn" class="btn btn-info m-2">🃏 Play Flip Cards</button>
-  </div>
+  </div></section>
   <!-- ✅ Sudoku Popup -->
    <div id="successMessage" class="popup-message" style="
   display: none;
@@ -317,7 +315,8 @@
 <script src="/js/games-popup.js"></script>
  <script src="/js/sudoku-generator.js"></script>
 <!-- Elfsight AI Chatbot | Untitled AI Chatbot -->
+<!-- Elfsight AI Chatbot | kids-adda.fun -->
 <script src="https://static.elfsight.com/platform/platform.js" async></script>
-<div class="elfsight-app-22387e82-e7ba-411d-bafe-638e594a094d" data-elfsight-app-lazy></div>
+<div class="elfsight-app-22387e82-e7ba-411d-bafe-638e594a094d" data-use-service-core defer></div>
 </body>
 </html>

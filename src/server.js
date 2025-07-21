@@ -36,9 +36,9 @@ app.use(helmet.contentSecurityPolicy({
   "https://www.googletagmanager.com",
   "https://unpkg.com",
   "https://static.cloudflareinsights.com",
-  "'unsafe-eval'",
   "blob:",
-  "https://www.kids-adda.fun"
+  "https://www.kids-adda.fun",
+   "https://static.elfsight.com" 
 ],
 scriptSrcElem: [
   "'self'",
@@ -47,7 +47,9 @@ scriptSrcElem: [
   "https://unpkg.com",
   "https://static.cloudflareinsights.com",
   "https://fonts.googleapis.com",
-  "https://www.kids-adda.fun"
+  "https://www.kids-adda.fun",
+  "https://static.elfsight.com",
+  "https://apps.elfsight.com" 
 ],
     styleSrc: [
       "'self'",
@@ -60,8 +62,13 @@ scriptSrcElem: [
     ],
     workerSrc: ["'self'", "blob:"],
     imgSrc: ["'self'", "data:", "https:"],
-    connectSrc: ["'self'", "https://www.google-analytics.com"],
-    frameSrc: ["'none'"],
+    connectSrc: ["'self'",
+      "https://www.google-analytics.com",
+      "https://apps.elfsight.com",
+    "https://core.service.elfsight.com",
+   "https://static.elfsight.com"], 
+    frameSrc: [ "'self'",
+      "https://apps.elfsight.com"],
     objectSrc: ["'none'"]
   }
 }));
