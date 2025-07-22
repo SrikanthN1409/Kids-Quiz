@@ -2,6 +2,9 @@
 <html lang="en">
     
 <head>
+  <!-- SweetAlert2 (CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Confetti.js (CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" 
         crossorigin="anonymous"
         integrity="sha384-6LUCQV3N8QZ8ZlQoJq0vQOWZtkWJ9OqPzQ6J8Z6Z6f6U5Q6V5U6f6P0Y6Z6Z6Z6"
@@ -41,6 +44,7 @@
     navigator.serviceWorker.register('/service-worker.js');
   }
 </script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.1.5/dist/tesseract.min.js"></script> -->
 </head>
 <body class="theme">
 <div class="page-wrapper">
@@ -255,7 +259,7 @@
     </div>
     <canvas id="slateCanvas" width="350" height="350" style="margin-top: 10px;"></canvas>
     <br>
-    <button id="checkDrawing">Validate Alphabet</button>
+    <button id="checkDrawing" class="btn btn-primary">Validate Alphabet</button>
     <button id="clearDrawing">🧽 Clear</button>
     <button id="closeSlateContent">Close</button>
     <p id="drawingResult" class="feedback-box"></p>
@@ -296,7 +300,6 @@
     </div>
   </div>
 </dialog>
-
 
 <footer>
   <strong>

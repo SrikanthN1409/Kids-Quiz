@@ -36,10 +36,9 @@ app.use(helmet.contentSecurityPolicy({
   "https://www.googletagmanager.com",
   "https://unpkg.com",
   "https://static.cloudflareinsights.com",
+   "'unsafe-eval'",
   "blob:",
-  "https://www.kids-adda.fun",
-   "https://cdn.jsdelivr.net"
-
+  "https://www.kids-adda.fun"
 ],
 scriptSrcElem: [
   "'self'",
@@ -49,7 +48,6 @@ scriptSrcElem: [
   "https://static.cloudflareinsights.com",
   "https://fonts.googleapis.com",
   "https://www.kids-adda.fun",
- "self https://cdn.jsdelivr.net"
 
 ],
     styleSrc: [
@@ -64,10 +62,9 @@ scriptSrcElem: [
     workerSrc: ["'self'", "blob:"],
     imgSrc: ["'self'", "data:", "https:"],
     connectSrc: ["'self'",
-      "https://www.google-analytics.com",
-      "https://*.intercom.io"
+      "https://www.google-analytics.com"
     ],
-    frameSrc: [ "'self'"
+    frameSrc: [ "'none'"
     ],
     objectSrc: ["'none'"]
   }
@@ -125,10 +122,7 @@ app.get('/api/hit-count', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
-
-
-
-
+// 
 // ✅ Feedback Email API
 app.post('/api/feedback', async (req, res) => {
   const { message } = req.body;

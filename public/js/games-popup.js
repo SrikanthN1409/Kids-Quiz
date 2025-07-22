@@ -79,21 +79,21 @@ function generateSudoku(level) {
   table.classList.add('table', 'table-bordered', 'text-center', 'mx-auto');
   table.style.maxWidth = '400px';
 
-  for (let r = 0; r < 4; r++) {
+  for (let r = 0; r < 5; r++) {
     const row = document.createElement('tr');
-    for (let c = 0; c < 4; c++) {
+    for (let c = 0; c < 5; c++) {
       const cell = document.createElement('td');
       if (puzzle[r][c] === 0) {
         const input = document.createElement('input');
         input.type = 'number';
         input.min = 1;
-        input.max = 4;
+        input.max = 5;
         input.className = 'form-control text-center';
         input.dataset.row = r;
         input.dataset.col = c;
 
         input.addEventListener('input', () => {
-          if (input.value < 1 || input.value > 4) input.value = '';
+          if (input.value < 1 || input.value > 5) input.value = '';
           validateSudoku();
         });
 
@@ -113,19 +113,20 @@ function generateSudoku(level) {
 
   function generateDynamicSudoku(level) {
     const fullGrid = [
-      [1, 2, 3, 4],
-      [3, 4, 1, 2],
-      [4, 1, 2, 3],
-      [2, 3, 4, 1]
+      [1, 2, 3, 4, 5],
+      [3, 4, 5, 1, 2],
+      [4, 5, 1, 2, 3],
+      [5, 1, 2, 3, 4],
+      [2, 3, 4, 5, 1]
     ];
 
     const cloneGrid = JSON.parse(JSON.stringify(fullGrid));
-    let blanks = level === 'medium' ? 6 : level === 'hard' ? 8 : 4;
+    let blanks = level === 'medium' ? 10 : level === 'hard' ? 15 : 6;
 
     let removed = 0;
     while (removed < blanks) {
-      const r = Math.floor(Math.random() * 4);
-      const c = Math.floor(Math.random() * 4);
+      const r = Math.floor(Math.random() * 5);
+      const c = Math.floor(Math.random() * 5);
       if (cloneGrid[r][c] !== 0) {
         cloneGrid[r][c] = 0;
         removed++;

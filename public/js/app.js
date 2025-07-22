@@ -9,15 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   }
-function showConfetti() {
+
+  function showConfetti() {
   if (typeof confetti === 'function') {
-    confetti({
-      particleCount: 150,
-      spread: 100,
-      origin: { y: 0.6 }
-    });
+    confetti();
   } else {
-    console.warn('Confetti function not found.');
+    console.warn('Confetti is not available');
   }
 }
 
@@ -45,7 +42,7 @@ function showConfetti() {
       const originalText = btn.textContent;
       btn.disabled = true;
       btn.textContent = 'Resetting...';
-       showConfetti(); 
+     
       // Check storage availability
       let storageCleared = false;
       if (typeof localStorage !== 'undefined' && localStorage.clear) {
@@ -180,8 +177,8 @@ function showConfetti() {
       const li = document.createElement('li');
       li.textContent = q['choice_' + letter];
 li.onclick = () => {
-  if (choicesEl.classList.contains('disabled')) return; // Prevent double-click
-  choicesEl.classList.add('disabled');
+  // if (choicesEl.classList.contains('disabled')) return; // Prevent double-click
+  // choicesEl.classList.add('disabled');
 
   const correctLetter = q.correct.toLowerCase();
   const isCorrect = letter.toLowerCase() === correctLetter;
@@ -307,12 +304,14 @@ li.onclick = () => {
 
   window.addEventListener('load', () => {
     console.log("✅ Page fully loaded");
-    showConfetti(); 
+    confetti();
+ 
   });
     // Open/Close Sudoku Dialog
   document.getElementById('openSudokuPopupBtn')?.addEventListener('click', () => {
     document.getElementById('sudokuDialog').showModal();
-     showConfetti(); 
+     confetti();
+ 
   });
   function closeSudokuDialog() {
     document.getElementById('sudokuDialog').close();
@@ -321,7 +320,7 @@ li.onclick = () => {
   // Open/Close Flip Cards Dialog
   document.getElementById('openFlipCardsPopupBtn')?.addEventListener('click', () => {
     document.getElementById('flipCardsDialog').showModal();
-     showConfetti(); 
+    confetti(); 
   });
   function closeFlipCardsDialog() {
     document.getElementById('flipCardsDialog').close();

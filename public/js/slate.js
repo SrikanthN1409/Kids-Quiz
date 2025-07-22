@@ -225,7 +225,7 @@ canvas.height = canvas.offsetHeight;
   // Auto-check again in 3 seconds
   setTimeout(() => {
     validateDrawing();
-  }, 15000);
+  }, 13000);
 } else {
          drawingResult.textContent = `You tried "${expected}" But with ${confidence}% confidence.`;
       drawingResult.style.color = 'green';
