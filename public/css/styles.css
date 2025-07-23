@@ -1172,12 +1172,12 @@ html, body {
 }
 
 /* === Fullscreen Slate Popup Fix for Android === */
-#slatePopup {
+#slatePopup, .slate-fullscreen, .popup-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   z-index: 1000;
   background-color: white;
   display: flex;
@@ -1185,6 +1185,7 @@ html, body {
   justify-content: space-between;
   align-items: center;
   overflow: hidden;
+   max-height: 100dvh;
 }
 
 #drawingCanvas {
